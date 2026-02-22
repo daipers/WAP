@@ -1,0 +1,124 @@
+### Example Rubric for WAA‑ADS Scoring
+
+version: '1.0'
+
+# Total possible points for each composite score.  The final CPS and ASI
+# are normalized to 0–100 based on the sum of weighted dimensions.
+
+cps:
+  total_points: 100
+  dimensions:
+    problem_decomposition:
+      weight: 0.20
+      description: >
+        Measures how well the candidate decomposes the problem into coherent sub‑tasks
+        and orders them logically.
+      features:
+        - structure.plan_quality
+        - structure.decomposition_depth
+    logical_consistency:
+      weight: 0.15
+      description: >
+        Evaluates whether the candidate’s reasoning steps are internally consistent
+        and free of contradictions.
+      features:
+        - structure.logical_consistency
+    correctness_under_constraints:
+      weight: 0.20
+      description: >
+        Assesses accuracy when operating under time, token, or information constraints.
+      features:
+        - structure.correctness_rate
+        - structure.constraint_compliance
+    tool_usage_competence:
+      weight: 0.20
+      description: >
+        Evaluates the appropriateness of tool choices and whether the candidate verifies
+        tool outputs before integrating them.
+      features:
+        - tooling_instincts.tool_selection_score
+        - tooling_instincts.verification_rate
+    output_clarity:
+      weight: 0.15
+      description: >
+        Rewards clear communication, normalized to avoid verbosity bias.  Measures
+        clarity of explanations and succinctness relative to task requirements.
+      features:
+        - structure.output_clarity
+        - structure.succinctness
+    verification_discipline:
+      weight: 0.10
+      description: >
+        Measures the extent to which the candidate self‑checks work and writes tests
+        before finalizing an answer.
+      features:
+        - evaluation_discipline.self_check_rate
+        - evaluation_discipline.test_count
+
+  thresholds:
+    # Minimum total CPS to achieve each tier
+    bronze: 40
+    silver: 60
+    gold: 80
+
+asi:
+  total_points: 100
+  signals:
+    adaptability:
+      weight: 0.25
+      description: >
+        Measures response latency and quality when tasks change or constraints tighten.
+      features:
+        - adaptation.response_latency
+        - adaptation.revision_count
+    failure_recovery:
+      weight: 0.20
+      description: >
+        Assesses ability to identify mistakes, acknowledge them, and correct them effectively.
+      features:
+        - failure_recovery.ack_latency
+        - failure_recovery.correction_success
+    meta_cognition:
+      weight: 0.20
+      description: >
+        Measures the frequency and quality of explicit assumptions, uncertainty statements,
+        and reflection on reasoning steps.
+      features:
+        - meta_cognition.uncertainty_statements
+        - meta_cognition.assumption_calls
+    risk_anticipation:
+      weight: 0.15
+      description: >
+        Scores ability to anticipate downstream risks, edge cases, and potential failure points.
+      features:
+        - risk_anticipation.checklist_quality
+        - risk_anticipation.contingency_plans
+    composure_prioritization:
+      weight: 0.10
+      description: >
+        Rewards remaining calm under pressure and making well‑prioritized decisions when resources are limited.
+      features:
+        - composure.prioritization_score
+    improvement_instinct:
+      weight: 0.10
+      description: >
+        Evaluates whether the candidate improves both their process and output over time.
+      features:
+        - improvement_instinct.refinement_cycles
+
+  thresholds:
+    # Minimum total ASI to achieve each tier
+    bronze: 40
+    silver: 60
+    gold: 80
+    apprentice_ready: 85
+
+disqualifiers:
+  - name: High integrity risk
+    condition: "integrity_flags.high_risk == true"
+    effect: "set_final_scores_to_zero"
+    description: >
+      If the integrity and anti‑gaming service flags a session as high risk of
+      cheating or prompt injection, the final CPS and ASI are set to zero.  A
+      human review may override this disqualification if the flag is deemed a
+      false positive.

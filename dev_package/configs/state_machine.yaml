@@ -1,0 +1,53 @@
+### Canonical State Machine Definition for WAA‑ADS Sessions
+
+# Each key defines a session state.  Under each state, define the events
+# that trigger transitions to a new state.  A state with no events is
+# terminal.  The orchestrator uses these transitions to drive the
+# assessment lifecycle.  Modify or extend this file to adapt the state
+# machine to your own needs, but always version and sign changes.
+
+INIT:
+  on_consent_received: CONSENTED
+
+CONSENTED:
+  on_diagnostic_start: DIAGNOSTIC_STARTED
+
+DIAGNOSTIC_STARTED:
+  on_submit: DIAGNOSTIC_SUBMITTED
+
+DIAGNOSTIC_SUBMITTED:
+  on_schedule_interview: INTERVIEW_SCHEDULED
+
+INTERVIEW_SCHEDULED:
+  on_interview_start: INTERVIEW_STARTED
+
+INTERVIEW_STARTED:
+  on_next_phase: INTERVIEW_PHASE
+  on_submit: INTERVIEW_SUBMITTED
+
+INTERVIEW_PHASE:
+  on_next_phase: INTERVIEW_PHASE
+  on_finish: INTERVIEW_SUBMITTED
+
+INTERVIEW_SUBMITTED:
+  on_extract_features: FEATURE_EXTRACTION
+
+FEATURE_EXTRACTION:
+  on_scoring: SCORING
+
+SCORING:
+  on_quality_gate_pass: PUBLISH_READY
+  on_quality_gate_fail: REVIEW_HOLD
+
+PUBLISH_READY:
+  on_publish: PUBLISHED
+
+REVIEW_HOLD:
+  on_void: VOIDED
+  on_pass: PUBLISH_READY
+
+PUBLISHED:
+  # Terminal state for completed sessions.
+
+VOIDED:
+  # Terminal state for sessions invalidated due to fraud or errors.
