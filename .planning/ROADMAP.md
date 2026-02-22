@@ -7,7 +7,7 @@
 ## Phases
 
 - [x] **Phase 1: Content Bank & Identity Foundations** — Item bank, QTI import/export, identity, session management, audit foundations
-- [ ] **Phase 2: Delivery Orchestration** — Test assembly, content delivery, timing, navigation, save/resume
+- [x] **Phase 2: Delivery Orchestration** — Test assembly, content delivery, timing, navigation, save/resume, integrity controls
 - [ ] **Phase 3: Scoring & Reporting Engine** — Feature extraction, scoring engine, scorecards, LTI grade passback
 - [ ] **Phase 4: Integrity & Identity Controls** — Behavioral signals, risk-tiered identity assurance, lockdown controls (v2)
 - [ ] **Phase 5: Audit & Compliance Hardening** — Immutable audit ledger, data retention, compliance reporting (v2)
@@ -63,9 +63,9 @@
 
 **Plans:** 3 plans
 
-- [ ] 02-01-PLAN.md — Test Assembly Service (TEST-01, TEST-02, TEST-03)
-- [ ] 02-02-PLAN.md — Delivery API with WebSocket (DELV-01, DELV-02, DELV-03)
-- [ ] 02-03-PLAN.md — Integrity Controls (INTG-01, INTG-02)
+- [x] 02-01-PLAN.md — Test Assembly Service (TEST-01, TEST-02, TEST-03)
+- [x] 02-02-PLAN.md — Delivery API with WebSocket (DELV-01, DELV-02, DELV-03)
+- [x] 02-03-PLAN.md — Integrity Controls (INTG-01, INTG-02)
 
 ---
 
@@ -132,7 +132,7 @@
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Content Bank & Identity | 3/3 | ✓ Complete | 2026-02-22 |
-| 2. Delivery Orchestration | 0/3 | Not started | - |
+| 2. Delivery Orchestration | 3/3 | ✓ Complete | 2026-02-22 |
 | 3. Scoring & Reporting | 0/1 | Not started | - |
 | 4. Integrity & Identity | 0/1 | Not started | - |
 | 5. Audit & Compliance | 0/1 | Not started | - |
