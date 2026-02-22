@@ -97,7 +97,7 @@ class ContentBankService:
 
         item = AssessmentItem(
             item_id=item_id,
-            current_version="1.0",
+            current_version="",  # Will be set by add_version
             metadata=metadata,
             versions=[],
             is_active=True,

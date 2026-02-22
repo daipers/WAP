@@ -57,17 +57,18 @@ class AssessmentItem:
         Returns:
             The newly created ItemVersion
         """
-        # Determine version number
+        # Determine version number based on current_version and existing versions
         if self.versions:
-            last_version = self.versions[-1]
+            # Increment from the last version
             try:
-                major, minor = last_version.version.split(".")
+                major, minor = self.current_version.split(".")
                 new_minor = int(minor) + 1
                 new_version = f"{major}.{new_minor}"
             except (ValueError, AttributeError):
                 # Fallback: use timestamp-based version
                 new_version = str(int(time.time()))
         else:
+            # First version
             new_version = "1.0"
 
         version = ItemVersion(
