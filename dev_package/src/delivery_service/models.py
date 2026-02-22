@@ -9,7 +9,10 @@ Provides assessment definitions, section configurations, and selection rules.
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from delivery_service.integrity_config import LockdownConfig
 
 
 class NavigationMode(str, Enum):
@@ -84,6 +87,7 @@ class AssessmentDefinition:
     time_limit_seconds: Optional[int] = None  # Overall time limit (None = no limit)
     attempt_limit: Optional[int] = None  # Max attempts (None = unlimited)
     navigation_mode: NavigationMode = NavigationMode.LINEAR
+    lockdown: Optional[LockdownConfig] = None  # Lockdown/integrity settings
     created_at: datetime = field(default_factory=datetime.utcnow)
 
     def __post_init__(self):
