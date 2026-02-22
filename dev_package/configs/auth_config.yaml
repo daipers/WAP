@@ -1,0 +1,14 @@
+# Authentication Configuration
+# JWT settings for session management
+
+# Secret key for signing tokens (CHANGE IN PRODUCTION)
+jwt_secret: "dev-secret-key-change-in-production"
+
+# JWT algorithm (HS256 for symmetric signing)
+jwt_algorithm: "HS256"
+
+# Access token expiration (minutes)
+access_token_expire_minutes: 15
+
+# Refresh token expiration (days)
+refresh_token_expire_days: 7
