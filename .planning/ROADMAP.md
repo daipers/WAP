@@ -61,7 +61,11 @@
 7. System supports configurable lockdown and integrity controls
 8. Integrity events are logged with precise timestamps
 
-**Plans:** TBD
+**Plans:** 3 plans
+
+- [ ] 02-01-PLAN.md — Test Assembly Service (TEST-01, TEST-02, TEST-03)
+- [ ] 02-02-PLAN.md — Delivery API with WebSocket (DELV-01, DELV-02, DELV-03)
+- [ ] 02-03-PLAN.md — Integrity Controls (INTG-01, INTG-02)
 
 ---
 
@@ -128,7 +132,7 @@
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Content Bank & Identity | 3/3 | ✓ Complete | 2026-02-22 |
-| 2. Delivery Orchestration | 0/1 | Not started | - |
+| 2. Delivery Orchestration | 0/3 | Not started | - |
 | 3. Scoring & Reporting | 0/1 | Not started | - |
 | 4. Integrity & Identity | 0/1 | Not started | - |
 | 5. Audit & Compliance | 0/1 | Not started | - |
