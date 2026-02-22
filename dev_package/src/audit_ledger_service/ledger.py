@@ -239,10 +239,21 @@ class AuditLedger:
             return True, []
 
         invalid_entries = []
-        prev_hash = self._genesis_hash
 
-        for entry in session_events:
-            # Recreate the content that was hashed
+        # Build a map of event_id -> entry for quick lookup
+        event_by_id = {entry.event_id: entry for entry in self.entries}
+
+        # Track prev_hash per session - start with genesis
+        session_prev_hash = self._genesis_hash
+
+        # Go through ALL entries in order to maintain proper chain
+        for entry in self.entries:
+            if entry.session_id != session_id:
+                # Update global tracking even if not this session
+                session_prev_hash = entry.hash
+                continue
+
+            # Recreate the content that was hashed (must match record_audit_event exactly)
             content = {
                 "event_id": entry.event_id,
                 "timestamp": entry.timestamp,
@@ -252,7 +263,8 @@ class AuditLedger:
                 "event_type": entry.event_type,
                 "action": entry.action,
                 "payload": entry.payload,
-                "prev_hash": prev_hash,
+                "metadata": {},  # Empty dict since we don't store metadata in LedgerEntry
+                "prev_hash": session_prev_hash,
             }
             data_str = json.dumps(content, sort_keys=True)
 
@@ -262,7 +274,8 @@ class AuditLedger:
             if computed_hash != entry.hash:
                 invalid_entries.append(entry)
 
-            prev_hash = entry.hash
+            # Update prev_hash for next event in this session
+            session_prev_hash = entry.hash
 
         return len(invalid_entries) == 0, invalid_entries
 
