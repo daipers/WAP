@@ -10,10 +10,19 @@
 
 | Attribute | Value |
 |-----------|-------|
-| Current Phase | Roadmap (planning) |
-| Current Plan | - |
-| Status | Not started |
-| Progress | 0% |
+| Current Phase | 01-content-bank-identity |
+| Current Plan | 02 (completed) |
+| Status | In Progress |
+| Progress | ~20% (2/10 plans) |
+
+---
+
+## Completed Plans
+
+| Phase | Plan | Summary |
+|-------|------|---------|
+| 01-content-bank-identity | 01 | Identity service with JWT auth |
+| 01-content-bank-identity | 02 | Content bank with QTI import/export |
 
 ---
 
@@ -24,8 +33,9 @@
 | Requirements (v1) | 24 |
 | Requirements (v2) | 8 |
 | Phases | 5 |
-| Plans created | 0 |
-| Plans completed | 0 |
+| Plans created | 10 |
+| Plans completed | 2 |
+| Last session | 2026-02-22 |
 
 ---
 
@@ -39,6 +49,9 @@
 | QTI 3.0 for content format | Industry standard (1EdTech), ensures portability | Decided in research |
 | LTI 1.3 for LMS integration | Fits institutional workflows immediately | Decided in research |
 | Python service skeletons | Provided in dev package — extend rather than rewrite | Decided in PROJECT.md |
+| xml.etree.ElementTree for QTI | No external dependencies for QTI 1.2 parsing | Decided in 01-02 |
+| Version auto-increment (1.0→1.1→1.2) | Simple version tracking without complex branching | Decided in 01-02 |
+| Soft delete preserves history | Maintains audit trail for content changes | Decided in 01-02 |
 
 ### Phase Order Rationale
 
@@ -68,4 +81,8 @@
 
 **Last updated:** 2026-02-22
 
-**Next action:** Approve roadmap → `/gsd-plan-phase 1`
+**Next action:** Execute plan 03 of phase 01-content-bank-identity
+
+**Completed:** 
+- Plan 01: JWT authentication service
+- Plan 02: Content bank with QTI import/export, versioning, metadata
