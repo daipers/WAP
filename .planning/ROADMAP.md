@@ -35,7 +35,11 @@
 8. System records immutable audit log entries for each assessment attempt
 9. System captures delivery events including start, answer, submit, and terminate actions
 
-**Plans:** TBD
+**Plans:** 3 plans
+
+- [ ] 01-identity-session-PLAN.md — Identity & Session Service (IDEN-01, IDEN-02, IDEN-03)
+- [ ] 02-content-bank-PLAN.md — Content Bank with QTI Import/Export (CONT-01, CONT-02, CONT-03, CONT-04)
+- [ ] 03-audit-ledger-PLAN.md — Audit Ledger Foundations (AUDT-01, AUDT-02)
 
 ---
 
@@ -123,7 +127,7 @@
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Content Bank & Identity | 0/1 | Not started | - |
+| 1. Content Bank & Identity | 0/3 | Not started | - |
 | 2. Delivery Orchestration | 0/1 | Not started | - |
 | 3. Scoring & Reporting | 0/1 | Not started | - |
 | 4. Integrity & Identity | 0/1 | Not started | - |
