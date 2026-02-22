@@ -11,9 +11,9 @@
 | Attribute | Value |
 |-----------|-------|
 | Current Phase | 02-delivery-orchestration |
-| Current Plan | 01 (completed) |
+| Current Plan | 03 (completed) |
 | Status | ✓ Complete |
-| Progress | ~40% (4/10 plans) |
+| Progress | ~50% (5/10 plans) |
 
 ---
 
@@ -25,6 +25,7 @@
 | 01-content-bank-identity | 02 | Content bank with QTI import/export |
 | 01-content-bank-identity | 03 | Audit ledger with hash chain |
 | 02-delivery-orchestration | 01 | Test assembly service with item selection |
+| 02-delivery-orchestration | 03 | Lockdown config with presets and integrity event logging |
 
 ---
 
@@ -36,7 +37,7 @@
 | Requirements (v2) | 8 |
 | Phases | 5 |
 | Plans created | 10 |
-| Plans completed | 4 |
+| Plans completed | 5 |
 | Last session | 2026-02-22 |
 
 ---
@@ -56,6 +57,7 @@
 | Soft delete preserves history | Maintains audit trail for content changes | Decided in 01-02 |
 | Global hash chain for audit log | Simpler verification - session filtering at query time | Decided in 01-03 |
 | Test assembly separation of concerns | Selection mode (which items) separate from order mode (how arranged) | Decided in 02-01 |
+| Lockdown levels NONE/STANDARD/STRICT | Standard defaults: require_fullscreen, block_copy_paste, max_tab_switches=3 | Decided in 02-03 |
 
 ### Phase Order Rationale
 
@@ -92,3 +94,4 @@
 - Plan 02: Content bank with QTI import/export, versioning, metadata
 - Plan 03: Audit ledger with hash chain, event types, immutability guarantees
 - Plan 02-01: Test assembly service with item selection (RANDOM, FIXED, ADAPTIVE), ordering (SEQUENTIAL, RANDOM, SHUFFLE_SECTIONS), and validation
+- Plan 02-03: Lockdown configuration (NONE/STANDARD/STRICT), integrity event logging using audit ledger, lockdown enforcement helpers
