@@ -16,8 +16,8 @@ from .models import (
     OrderMode,
     NavigationMode,
 )
-from ..content_bank_service.content_bank import ContentBankService
-from ..content_bank_service.models import AssessmentItem
+from content_bank_service.content_bank import ContentBankService
+from content_bank_service.models import AssessmentItem
 
 
 class TestAssemblyError(Exception):

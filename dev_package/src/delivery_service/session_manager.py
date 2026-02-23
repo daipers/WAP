@@ -21,7 +21,7 @@ from typing import Dict, List, Optional, Any
 import uuid
 
 from .models import AssessmentDefinition, AssessmentSession as ModelAssessmentSession
-from ..identity_service.identity import IdentityService
+from identity_service.identity import IdentityService
 
 
 class SessionState(str, Enum):

@@ -30,7 +30,7 @@ from .session_manager import (
     InvalidStateTransitionError,
 )
 from .test_assembly import TestAssemblyService
-from ..content_bank_service.content_bank import ContentBankService
+from content_bank_service.content_bank import ContentBankService
 
 
 # ============================================================================
