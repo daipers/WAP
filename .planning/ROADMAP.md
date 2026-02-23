@@ -61,7 +61,7 @@
 7. System supports configurable lockdown and integrity controls
 8. Integrity events are logged with precise timestamps
 
-**Plans:** 3 plans
+**Plans:** 4 plans
 
 - [x] 02-01-PLAN.md — Test Assembly Service (TEST-01, TEST-02, TEST-03)
 - [x] 02-02-PLAN.md — Delivery API with WebSocket (DELV-01, DELV-02, DELV-03)
@@ -92,6 +92,7 @@
 - [ ] 03-01-PLAN.md — Immutable score runs and scoring pipeline primitives
 - [ ] 03-02-PLAN.md — Scorecards and CSV reporting artifacts
 - [ ] 03-03-PLAN.md — LTI 1.3 launch and AGS grade passback
+- [ ] 03-04-PLAN.md — LTI routing + AGS score totals gap closure
 
 ---
 
@@ -137,7 +138,7 @@
 |-------|----------------|--------|-----------|
 | 1. Content Bank & Identity | 3/3 | ✓ Complete | 2026-02-22 |
 | 2. Delivery Orchestration | 3/3 | ✓ Complete | 2026-02-22 |
-| 3. Scoring & Reporting | 0/1 | Not started | - |
+| 3. Scoring & Reporting | 0/4 | Not started | - |
 | 4. Integrity & Identity | 0/1 | Not started | - |
 | 5. Audit & Compliance | 0/1 | Not started | - |
 
