@@ -110,7 +110,6 @@
 
 | # | Title | Area | Created |
 |---|-------|------|---------|
-| 1 | Explore Netlify for simple UI hosting | general | 2026-02-23 |
 
 ---
 
