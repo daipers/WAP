@@ -25,6 +25,8 @@ class EventType(Enum):
     ITEM_VIEWED = "item_viewed"
     TERMINATE = "terminate"
     TIMEOUT = "timeout"
+    SCORING_RUN_CREATED = "scoring_run_created"
+    SCORING_RESCORE = "scoring_rescore"
 
 
 # Payload schemas for each event type
@@ -70,6 +72,26 @@ PAYLOAD_SCHEMAS: Dict[EventType, Dict[str, Any]] = {
     EventType.TIMEOUT: {
         "required": ["session_duration"],
         "optional": ["last_activity"],
+    },
+    EventType.SCORING_RUN_CREATED: {
+        "required": [
+            "score_run_id",
+            "response_snapshot_id",
+            "rubric_version",
+            "input_hash",
+            "output_hash",
+        ],
+        "optional": ["feature_version"],
+    },
+    EventType.SCORING_RESCORE: {
+        "required": [
+            "score_run_id",
+            "response_snapshot_id",
+            "rubric_version",
+            "input_hash",
+            "output_hash",
+        ],
+        "optional": ["feature_version", "reason"],
     },
 }
 
