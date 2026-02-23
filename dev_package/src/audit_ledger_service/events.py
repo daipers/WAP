@@ -27,6 +27,8 @@ class EventType(Enum):
     TIMEOUT = "timeout"
     SCORING_RUN_CREATED = "scoring_run_created"
     SCORING_RESCORE = "scoring_rescore"
+    LTI_LAUNCH = "lti_launch"
+    LTI_GRADE_PASSBACK = "lti_grade_passback"
 
 
 # Payload schemas for each event type
@@ -92,6 +94,14 @@ PAYLOAD_SCHEMAS: Dict[EventType, Dict[str, Any]] = {
             "output_hash",
         ],
         "optional": ["feature_version", "reason"],
+    },
+    EventType.LTI_LAUNCH: {
+        "required": ["launch_id", "user_id"],
+        "optional": ["line_item_url", "issuer", "deployment_id"],
+    },
+    EventType.LTI_GRADE_PASSBACK: {
+        "required": ["score_run_id", "launch_id"],
+        "optional": ["line_item_url", "score_payload", "status"],
     },
 }
 
