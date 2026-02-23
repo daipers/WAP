@@ -1,0 +1,13 @@
+platform:
+  issuer: "https://lms.example.edu"
+  client_id: "lti-client-id"
+  deployment_id: "lti-deployment-id"
+  jwks_url: "https://lms.example.edu/.well-known/jwks.json"
+  auth_url: "https://lms.example.edu/oidc/auth"
+  token_url: "https://lms.example.edu/oauth/token"
+  audience: "https://lms.example.edu"
+
+tool:
+  tool_name: "WAA-ADS"
+  tool_url: "https://tool.example.edu"
+  default_line_item_url: "https://lms.example.edu/lineitems/default"
