@@ -194,12 +194,34 @@ class LTIService:
 
     @staticmethod
     def _build_score_payload(score_run: ScoreRun, user_id: str) -> Dict[str, Any]:
-        score_output = score_run.score_output
+        score_output = score_run.score_output or {}
+        total_score = score_output.get("total_score")
+        max_score = score_output.get("max_score")
+
+        if total_score is None:
+            cps_score = score_output.get("CPS")
+            asi_score = score_output.get("ASI")
+            if cps_score is not None or asi_score is not None:
+                total_score = (cps_score or 0) + (asi_score or 0)
+
+        if max_score is None:
+            cps_total = score_output.get("cps_total")
+            asi_total = score_output.get("asi_total")
+            if cps_total is not None or asi_total is not None:
+                max_score = (cps_total or 0) + (asi_total or 0)
+            elif total_score is not None:
+                max_score = total_score
+
+        if score_output and total_score is None:
+            total_score = 0
+        if score_output and max_score is None:
+            max_score = 0
+
         return {
             "userId": user_id,
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-            "scoreGiven": score_output.get("total_score"),
-            "scoreMaximum": score_output.get("max_score"),
+            "scoreGiven": total_score,
+            "scoreMaximum": max_score,
             "activityProgress": "Completed",
             "gradingProgress": "FullyGraded",
             "score_run_id": score_run.score_run_id,
