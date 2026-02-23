@@ -106,6 +106,12 @@
 - Phase 4: Behavioral proctoring ML, NIST identity assurance mapping
 - Phase 5: FERPA compliance, WCAG 2.2 testing
 
+### Pending Todos
+
+| # | Title | Area | Created |
+|---|-------|------|---------|
+| 1 | Explore Netlify for simple UI hosting | general | 2026-02-23 |
+
 ---
 
 ## Session Continuity
