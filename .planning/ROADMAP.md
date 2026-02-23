@@ -87,7 +87,11 @@
 7. System supports LTI 1.3 launch from LMS for seamless integration
 8. System sends grade passback via LTI Outcomes to update LMS grades
 
-**Plans:** TBD
+**Plans:** 3 plans
+
+- [ ] 03-01-PLAN.md — Immutable score runs and scoring pipeline primitives
+- [ ] 03-02-PLAN.md — Scorecards and CSV reporting artifacts
+- [ ] 03-03-PLAN.md — LTI 1.3 launch and AGS grade passback
 
 ---
 
