@@ -1,0 +1,102 @@
+{
+  "score_run_id": "sr-2026-02-23-0001",
+  "candidate": {
+    "id": "cand-1042",
+    "name": "Jordan Rivera",
+    "cohort": "Spring 2026"
+  },
+  "assessment": {
+    "id": "assess-logic-101",
+    "title": "Logic & Reasoning Assessment",
+    "version": "1.2"
+  },
+  "totals": {
+    "total_score": 84.5,
+    "max_score": 100,
+    "cps_total": 45.0,
+    "asi_total": 39.5
+  },
+  "sections": [
+    {
+      "id": "sec-1",
+      "name": "Critical Problem Solving",
+      "score": 45.0,
+      "max_score": 55,
+      "notes": "Strong evidence in structured reasoning and constraint handling."
+    },
+    {
+      "id": "sec-2",
+      "name": "Applied Systems Insight",
+      "score": 39.5,
+      "max_score": 45,
+      "notes": "Good system mapping; minor gaps in edge-case awareness."
+    }
+  ],
+  "evidence": [
+    {
+      "item_id": "item-01",
+      "section": "Critical Problem Solving",
+      "score": 9.5,
+      "max_score": 10,
+      "response": "Outlined constraints, proposed two viable paths, chose one with justification.",
+      "evidence": "Identified tradeoffs and used a simple decision matrix."
+    },
+    {
+      "item_id": "item-02",
+      "section": "Critical Problem Solving",
+      "score": 8.0,
+      "max_score": 10,
+      "response": "Sequenced steps for recovery, accounted for latency and retries.",
+      "evidence": "Captured failure modes and rollback plan."
+    },
+    {
+      "item_id": "item-03",
+      "section": "Critical Problem Solving",
+      "score": 9.0,
+      "max_score": 10,
+      "response": "Translated requirements into a minimal interface and validated with examples.",
+      "evidence": "Demonstrated correctness with three test cases."
+    },
+    {
+      "item_id": "item-04",
+      "section": "Critical Problem Solving",
+      "score": 8.5,
+      "max_score": 10,
+      "response": "Balanced performance with accuracy for the estimator.",
+      "evidence": "Quantified impact using rough complexity analysis."
+    },
+    {
+      "item_id": "item-05",
+      "section": "Applied Systems Insight",
+      "score": 8.0,
+      "max_score": 9,
+      "response": "Mapped system boundaries and ownership clearly.",
+      "evidence": "Included data flow diagram notes."
+    },
+    {
+      "item_id": "item-06",
+      "section": "Applied Systems Insight",
+      "score": 7.5,
+      "max_score": 9,
+      "response": "Designed monitoring with SLIs and alert thresholds.",
+      "evidence": "Suggested on-call escalation policy."
+    },
+    {
+      "item_id": "item-07",
+      "section": "Applied Systems Insight",
+      "score": 8.5,
+      "max_score": 9,
+      "response": "Optimized queue throughput under burst load.",
+      "evidence": "Added backpressure and priority routing."
+    },
+    {
+      "item_id": "item-08",
+      "section": "Applied Systems Insight",
+      "score": 7.5,
+      "max_score": 9,
+      "response": "Handled data retention rules with tiered storage.",
+      "evidence": "Documented retention schedule in runbook."
+    }
+  ],
+  "generated_at": "2026-02-23T06:30:00Z"
+}
