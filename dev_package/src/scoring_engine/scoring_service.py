@@ -144,6 +144,15 @@ class ScoringService:
         base_cls = self._base_scoring_engine.__class__
         return base_cls(rubric_path)
 
+    def get_score_run(self, score_run_id: str) -> Optional[ScoreRun]:
+        return self._score_runs.get_score_run_by_id(score_run_id)
+
+    def get_response_snapshot(self, snapshot_id: str) -> Optional[ResponseSnapshot]:
+        return self._score_runs.get_snapshot_by_id(snapshot_id)
+
+    def get_rubric(self) -> Dict[str, Any]:
+        return getattr(self._base_scoring_engine, "rubric", {})
+
     def score_session(
         self,
         session_id: str,

@@ -1,8 +1,8 @@
-from reporting_service.reporting import ReportingService
-from reporting_service.csv_export import export_scorecard_csv
+from .reporting import ReportingService
+from .csv_export import export_scorecard_csv
 
 try:
-    from reporting_service.tasks import (
+    from .tasks import (
         generate_scorecard_task,
         export_scorecard_csv_task,
     )

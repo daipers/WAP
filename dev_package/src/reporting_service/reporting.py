@@ -9,9 +9,15 @@ reporting service would generate formatted documents, embed evidence
 pointers, and provide links for employers to verify credentials.
 """
 
-from typing import Dict, Any
+from typing import Dict, Any, Optional, TYPE_CHECKING
 
-from scoring_engine.score_runs import ScoreRun, ResponseSnapshot
+try:
+    from scoring_engine.score_runs import ScoreRun, ResponseSnapshot
+except ModuleNotFoundError:
+    from ..scoring_engine.score_runs import ScoreRun, ResponseSnapshot
+
+if TYPE_CHECKING:
+    from scoring_engine.scoring_service import ScoringService
 
 
 class ReportingService:
@@ -65,3 +71,26 @@ class ReportingService:
             "asi_breakdown": scores.get("asi_breakdown", {}),
             "evidence": evidence,
         }
+
+
+def generate_scorecard_with_evidence(
+    score_run_id: str, scoring_service: Optional["ScoringService"] = None
+) -> Dict[str, Any]:
+    if scoring_service is None:
+        raise ValueError("ScoringService is required to generate evidence scorecards")
+
+    score_run = scoring_service.get_score_run(score_run_id)
+    if score_run is None:
+        raise ValueError(f"Score run {score_run_id} not found")
+
+    response_snapshot = scoring_service.get_response_snapshot(
+        score_run.response_snapshot_id
+    )
+    if response_snapshot is None:
+        raise ValueError("Response snapshot not found for score run")
+
+    rubric = scoring_service.get_rubric()
+    reporting_service = ReportingService(rubric)
+    return reporting_service.generate_scorecard(
+        response_snapshot.candidate_id, score_run, response_snapshot
+    )
