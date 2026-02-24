@@ -18,7 +18,7 @@ def _stringify_response(response: Any) -> str:
     return json.dumps(response, sort_keys=True)
 
 
-def export_scorecard_csv(scorecard: Dict[str, Any], output_path: str) -> str:
+def export_scorecard_to_csv(scorecard: Dict[str, Any], file_path: str) -> str:
     columns = [
         "candidate_id",
         "score_run_id",
@@ -26,12 +26,15 @@ def export_scorecard_csv(scorecard: Dict[str, Any], output_path: str) -> str:
         "feature_version",
         "CPS",
         "ASI",
+        "CPS_tier",
+        "ASI_tier",
+        "credential_level",
         "item_id",
         "response",
     ]
     evidence = scorecard.get("evidence") or {}
 
-    with open(output_path, "w", newline="", encoding="utf-8") as csvfile:
+    with open(file_path, "w", newline="", encoding="utf-8") as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=columns)
         writer.writeheader()
         for item_id in sorted(evidence.keys()):
@@ -44,9 +47,16 @@ def export_scorecard_csv(scorecard: Dict[str, Any], output_path: str) -> str:
                     "feature_version": scorecard.get("feature_version"),
                     "CPS": scorecard.get("CPS"),
                     "ASI": scorecard.get("ASI"),
+                    "CPS_tier": scorecard.get("CPS_tier"),
+                    "ASI_tier": scorecard.get("ASI_tier"),
+                    "credential_level": scorecard.get("credential_level"),
                     "item_id": item_id,
                     "response": _stringify_response(response),
                 }
             )
 
-    return output_path
+    return file_path
+
+
+def export_scorecard_csv(scorecard: Dict[str, Any], output_path: str) -> str:
+    return export_scorecard_to_csv(scorecard, output_path)
