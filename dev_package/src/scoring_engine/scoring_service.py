@@ -9,13 +9,13 @@ score run persistence, and audit logging.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Dict, Optional
+from typing import Any, Callable, Dict, Optional
 import time
 import uuid
 
 from audit_ledger_service.events import EventType, create_event
 from audit_ledger_service.ledger import AuditLedger
-from feature_extractor.extractor import FeatureExtractor
+from scoring_engine.feature_extractor import extract_features
 from scoring_engine.score_runs import ResponseSnapshot, ScoreRun, ScoreRunRepository
 from scoring_engine.scoring import ScoringEngine
 
@@ -32,7 +32,7 @@ class ScoringService:
         scoring_engine: ScoringEngine,
         audit_ledger: AuditLedger,
         score_runs: ScoreRunRepository,
-        feature_extractor: Optional[FeatureExtractor] = None,
+        feature_extractor: Optional[Callable[[Dict[str, Any]], Dict[str, Any]]] = None,
         rubric_map: Optional[Dict[str, Dict[str, str]]] = None,
         default_rubric_path: Optional[str] = None,
         default_rubric_version: str = "unknown",
@@ -40,7 +40,7 @@ class ScoringService:
         self._base_scoring_engine = scoring_engine
         self._audit_ledger = audit_ledger
         self._score_runs = score_runs
-        self._feature_extractor = feature_extractor or FeatureExtractor()
+        self._feature_extractor = feature_extractor or extract_features
         self._rubric_map = rubric_map or {}
         self._default_rubric_path = default_rubric_path
         self._default_rubric_version = default_rubric_version
@@ -78,7 +78,7 @@ class ScoringService:
         responses: Dict[str, Any],
         item_context: Dict[str, Any],
     ) -> ScoreRun:
-        feature_set = self._feature_extractor.extract_features(
+        feature_set = self._feature_extractor(
             {
                 "session_id": session_id,
                 "candidate_id": candidate_id,
