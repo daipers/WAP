@@ -94,3 +94,9 @@ def generate_scorecard_with_evidence(
     return reporting_service.generate_scorecard(
         response_snapshot.candidate_id, score_run, response_snapshot
     )
+
+
+def build_ags_payload(scorecard: Dict[str, Any]) -> Dict[str, Any]:
+    from .ags_payload import build_ags_payload as _build_ags_payload
+
+    return _build_ags_payload(scorecard)
