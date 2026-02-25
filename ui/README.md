@@ -1,4 +1,4 @@
-# WAA-ADS Demo UI
+# Standing Framework, Wizard's Apprentice Demo UI
 
 Static, Netlify-ready UI that demonstrates:
 - Landing + docs overview
