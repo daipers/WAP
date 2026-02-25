@@ -11,7 +11,7 @@ append‑only log service.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, field
 from typing import Dict, Any, List, Optional, Union, TYPE_CHECKING
 import hashlib
 import json
@@ -44,6 +44,7 @@ class LedgerEntry:
     payload: Dict[str, Any]
     prev_hash: Optional[str]
     hash: str
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for serialization."""
@@ -94,6 +95,7 @@ class AuditLedger:
             "event_type": action,
             "action": action,
             "payload": payload,
+            "metadata": {},
             "prev_hash": prev_hash,
         }
         data_str = json.dumps(content, sort_keys=True)
@@ -107,6 +109,7 @@ class AuditLedger:
             event_type=action,
             action=action,
             payload=payload,
+            metadata={},
             prev_hash=prev_hash,
             hash=entry_hash,
         )
@@ -167,6 +170,7 @@ class AuditLedger:
             if hasattr(event.event_type, "value")
             else str(event.event_type),
             payload=event.payload,
+            metadata=event.metadata,
             prev_hash=prev_hash,
             hash=entry_hash,
         )
@@ -185,11 +189,10 @@ class AuditLedger:
         """Get all events for a specific candidate."""
         return [entry for entry in self.entries if entry.candidate_id == candidate_id]
 
-    def get_events_by_type(
-        self, event_type: Union[str, "EventType"]
-    ) -> List[LedgerEntry]:
+    def get_events_by_type(self, event_type: Union[str, Any]) -> List[LedgerEntry]:
         """Get all events of a specific type."""
-        type_str = event_type.value if hasattr(event_type, "value") else str(event_type)
+        type_str = getattr(event_type, "value", event_type)
+        type_str = str(type_str)
         return [entry for entry in self.entries if entry.event_type == type_str]
 
     def get_session_attempt_events(
@@ -263,7 +266,7 @@ class AuditLedger:
                 "event_type": entry.event_type,
                 "action": entry.action,
                 "payload": entry.payload,
-                "metadata": {},  # Empty dict since we don't store metadata in LedgerEntry
+                "metadata": entry.metadata,
                 "prev_hash": session_prev_hash,
             }
             data_str = json.dumps(content, sort_keys=True)
@@ -323,6 +326,7 @@ class AuditLedger:
                 "event_type": entry.event_type,
                 "action": entry.action,
                 "payload": entry.payload,
+                "metadata": entry.metadata,
                 "prev_hash": prev_hash,
             }
             data_str = json.dumps(content, sort_keys=True)
