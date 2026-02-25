@@ -3,7 +3,7 @@ score_runs.py
 =============
 
 Immutable scoring run models and in-memory repository for deterministic
-hashing of inputs and outputs.
+hashing of inputs and outputs (timestamps excluded from hashes).
 """
 
 from __future__ import annotations
@@ -44,7 +44,6 @@ class ResponseSnapshot:
             "feature_values": self.feature_values,
             "feature_version": self.feature_version,
             "rubric_version": self.rubric_version,
-            "created_at": self.created_at,
         }
         return _stable_hash(payload)
 
@@ -82,7 +81,6 @@ class ScoreRun:
             "rubric_version": self.rubric_version,
             "feature_version": self.feature_version,
             "score_output": self.score_output,
-            "created_at": self.created_at,
         }
         return _stable_hash(payload)
 
