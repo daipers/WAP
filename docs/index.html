@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>WAA-ADS Demo UI</title>
+    <meta
+      name="description"
+      content="A simple, static demo UI for WAA-ADS scorecards, evidence, and CSV export."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;650&family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="ambient"></div>
+    <div class="page">
+      <header class="hero" id="top">
+        <nav class="nav">
+          <div class="brand">WAA-ADS</div>
+          <div class="nav-links">
+            <a href="#overview">Overview</a>
+            <a href="#demo">Run Demo</a>
+            <a href="#scorecard">Scorecard</a>
+            <a href="#docs">Docs</a>
+          </div>
+        </nav>
+
+        <div class="hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">Assessment Pipeline</p>
+            <h1>Trustworthy scorecards, made visible.</h1>
+            <p class="lead">
+              This demo UI showcases how WAA-ADS turns raw assessment responses into
+              explainable scores, evidence trails, and export-ready reporting.
+            </p>
+            <div class="hero-actions">
+              <a class="button primary" href="#demo">Try Demo</a>
+              <a class="button ghost" href="#docs">Runbook Links</a>
+            </div>
+            <div class="hero-meta">
+              <div>
+                <span class="label">Mode</span>
+                <span>Static demo (no backend)</span>
+              </div>
+              <div>
+                <span class="label">Data</span>
+                <span>Canned scorecard JSON</span>
+              </div>
+            </div>
+          </div>
+          <div class="hero-card">
+            <div class="card-head">Demo Snapshot</div>
+            <div class="card-score">
+              <div class="score-big">84.5</div>
+              <div class="score-meta">of 100</div>
+            </div>
+            <div class="card-grid">
+              <div>
+                <span class="label">CPS Total</span>
+                <span>45.0</span>
+              </div>
+              <div>
+                <span class="label">ASI Total</span>
+                <span>39.5</span>
+              </div>
+              <div>
+                <span class="label">Evidence Items</span>
+                <span>8</span>
+              </div>
+              <div>
+                <span class="label">CSV Export</span>
+                <span>Ready</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section class="section" id="overview">
+          <div class="section-title">
+            <h2>What this demo covers</h2>
+            <p>Landing + docs, admin-lite demo controls, and the full scorecard viewer.</p>
+          </div>
+          <div class="cards">
+            <article class="card">
+              <h3>Landing + Docs</h3>
+              <p>
+                A clear overview of the scoring pipeline, with direct links to
+                runbooks and integration notes.
+              </p>
+            </article>
+            <article class="card">
+              <h3>Admin-Lite Demo</h3>
+              <p>
+                Run a canned scoring demo locally in the browser, then download a
+                CSV export for review.
+              </p>
+            </article>
+            <article class="card">
+              <h3>Evidence Viewer</h3>
+              <p>
+                Inspect the scorecard breakdown and the evidence trail linked to
+                individual item responses.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="demo">
+          <div class="section-title">
+            <h2>Run the demo</h2>
+            <p>
+              Load the scorecard dataset, compute totals, and generate a CSV
+              export. No backend required.
+            </p>
+          </div>
+          <div class="demo-panel">
+            <div class="demo-actions">
+              <button class="button primary" id="run-demo">Run demo</button>
+              <button class="button ghost" id="download-csv" disabled>Download CSV</button>
+            </div>
+            <div class="demo-status" id="demo-status">
+              Awaiting action — click “Run demo” to load the scorecard.
+            </div>
+            <div class="demo-meta">
+              <div>
+                <span class="label">Dataset</span>
+                <span>scorecard.sample.json</span>
+              </div>
+              <div>
+                <span class="label">Render</span>
+                <span>Client-side</span>
+              </div>
+              <div>
+                <span class="label">Export</span>
+                <span>CSV (UTF-8)</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="scorecard">
+          <div class="section-title">
+            <h2>Scorecard Viewer</h2>
+            <p>Score summaries, section breakdowns, and item-level evidence.</p>
+          </div>
+
+          <div class="scorecard" id="scorecard-view">
+            <div class="scorecard-summary" id="scorecard-summary">
+              <div class="summary-empty">
+                Run the demo to populate the scorecard view.
+              </div>
+            </div>
+
+            <div class="scorecard-sections" id="scorecard-sections"></div>
+
+            <div class="scorecard-evidence">
+              <div class="evidence-head">
+                <h3>Evidence Trail</h3>
+                <span class="label" id="evidence-count">0 items</span>
+              </div>
+              <div class="evidence-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Item</th>
+                      <th>Section</th>
+                      <th>Score</th>
+                      <th>Response</th>
+                      <th>Evidence</th>
+                    </tr>
+                  </thead>
+                  <tbody id="evidence-body">
+                    <tr>
+                      <td colspan="5" class="table-empty">
+                        No evidence yet — run the demo.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="docs">
+          <div class="section-title">
+            <h2>Runbook & Links</h2>
+            <p>Quick references for demo validation, LTI launch, and reporting.</p>
+          </div>
+          <div class="cards">
+            <article class="card">
+              <h3>Demo Runbook</h3>
+              <p>Use the demo dataset to validate deterministic scoring and CSV export.</p>
+              <a class="link" href="https://github.com/daipers/WAP/blob/main/dev_package/README.md">
+                dev_package/README.md
+              </a>
+            </article>
+            <article class="card">
+              <h3>LTI Setup</h3>
+              <p>Configure LTI 1.3 launches and grade passback in your LMS.</p>
+              <a
+                class="link"
+                href="https://github.com/daipers/WAP/blob/main/.planning/phases/03-scoring-reporting/03-scoring-reporting-USER-SETUP.md"
+              >
+                03-scoring-reporting-USER-SETUP.md
+              </a>
+            </article>
+            <article class="card">
+              <h3>Reporting Notes</h3>
+              <p>Evidence ordering and CSV export details for downstream consumers.</p>
+              <a
+                class="link"
+                href="https://github.com/daipers/WAP/blob/main/dev_package/src/reporting_service/reporting.py"
+              >
+                reporting_service/reporting.py
+              </a>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <div>
+          <span>WAA-ADS Demo UI</span>
+          <span class="muted">GitHub Pages build</span>
+        </div>
+        <div class="muted">© <span id="year"></span> WAA-ADS</div>
+      </footer>
+    </div>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
