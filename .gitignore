@@ -1,0 +1,7 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+.ruff_cache/
+.venv/
+.pytest_cache/
+dev_package/data/
