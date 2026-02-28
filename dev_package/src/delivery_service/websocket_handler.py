@@ -14,11 +14,13 @@ Features:
 import asyncio
 import json
 import logging
+import os
 from datetime import datetime
 from typing import Any, Dict, Optional, Set
 
-from fastapi import WebSocket
+from fastapi import WebSocket, WebSocketDisconnect
 
+from ..utils.redis_client import RedisClient
 from .session_manager import SessionManager, SessionState
 
 
@@ -43,6 +45,9 @@ class DeliveryWebSocketHandler:
         self.session_manager = session_manager
         self._active_connections: Dict[str, Set[WebSocket]] = {}
         self._timer_tasks: Dict[str, asyncio.Task] = {}
+        self._pubsub_tasks: Dict[str, asyncio.Task] = {}
+        self.redis_client = RedisClient.get_instance()
+        self.pod_id = os.getenv("HOSTNAME", "local-pod")
 
     async def handle_connection(self, websocket: WebSocket, session_id: str) -> None:
         """
@@ -73,7 +78,7 @@ class DeliveryWebSocketHandler:
             )
             return
 
-        # Accept the connection
+        # Accepts the connection
         await websocket.accept()
 
         # Track the connection
@@ -81,9 +86,20 @@ class DeliveryWebSocketHandler:
             self._active_connections[session_id] = set()
         self._active_connections[session_id].add(websocket)
 
-        logger.info(f"WebSocket connected for session {session_id}")
+        # Track session on this pod in Redis
+        await self.redis_client.add_to_set(f"session:{session_id}:pods", self.pod_id)
 
-        # Start timer sync if not already running
+        logger.info(
+            f"WebSocket connected for session {session_id} on pod {self.pod_id}"
+        )
+
+        # Start Pub/Sub listener if not running
+        if session_id not in self._pubsub_tasks:
+            self._pubsub_tasks[session_id] = asyncio.create_task(
+                self._listen_for_session_updates(session_id)
+            )
+
+        # Start authoritative timer sync if not already running
         if session_id not in self._timer_tasks:
             self._timer_tasks[session_id] = asyncio.create_task(
                 self._timer_sync(session_id)
@@ -321,71 +337,107 @@ class DeliveryWebSocketHandler:
 
     async def _timer_sync(self, session_id: str) -> None:
         """
-        Send timer updates to all connected clients every second.
+        Distributed authoritative timer sync using Redis locking and Pub/Sub.
 
-        This runs as a background task and continues even when
-        clients disconnect (server-authoritative timing).
-
-        Args:
-            session_id: The session ID
+        One pod becomes 'authoritative' and publishes timer updates.
+        All pods with active connections for this session listen via Pub/Sub.
         """
-        logger.info(f"Starting timer sync for session {session_id}")
+        logger.info(f"Pod {self.pod_id} attempting timer authority for {session_id}")
 
-        while session_id in self._active_connections:
-            # Get all active connections for this session
-            connections = list(self._active_connections.get(session_id, []))
-
-            if connections:
-                # Check session state
+        while (
+            session_id in self._active_connections
+            or await self._has_remote_connections(session_id)
+        ):
+            # Try to acquire the authoritative lock for 5 seconds
+            if await self.redis_client.acquire_lock(
+                f"timer:{session_id}:lock", timeout=5
+            ):
                 try:
-                    session = self.session_manager.get_session(session_id)
-
-                    # Check for expiration
-                    if session.is_time_expired():
-                        self.session_manager.update_state(
-                            session_id, SessionState.EXPIRED
-                        )
-
-                        # Notify all clients
-                        for conn in connections:
-                            try:
-                                await conn.send_json(
-                                    {
-                                        "type": "expired",
-                                        "message": "Time expired",
-                                    }
-                                )
-                            except Exception:
-                                pass
-
-                        break
-
-                    # Send timer to all connections
-                    time_remaining = session.calculate_time_remaining()
-                    for conn in connections:
+                    logger.info(f"Pod {self.pod_id} IS AUTHORITATIVE for {session_id}")
+                    # Authority loop - run for a few iterations then re-acquire/allow others
+                    for _ in range(3):
                         try:
-                            await conn.send_json(
+                            session = self.session_manager.get_session(session_id)
+
+                            if session.is_time_expired():
+                                self.session_manager.update_state(
+                                    session_id, SessionState.EXPIRED
+                                )
+                                await self.redis_client.publish(
+                                    f"session:{session_id}:timer",
+                                    {"type": "expired", "message": "Time expired"},
+                                )
+                                return
+
+                            time_remaining = session.calculate_time_remaining()
+                            await self.redis_client.publish(
+                                f"session:{session_id}:timer",
                                 {
                                     "type": "timer",
                                     "time_remaining": time_remaining,
                                     "timestamp": datetime.utcnow().isoformat(),
-                                }
+                                },
                             )
-                        except Exception:
-                            pass
 
-                except KeyError:
-                    # Session no longer exists
-                    break
+                        except KeyError:
+                            return
 
-            # Wait 1 second before next update
-            await asyncio.sleep(1)
+                        await asyncio.sleep(1)
 
-        # Clean up timer task
+                        # Stop if no connections anywhere
+                        if (
+                            session_id not in self._active_connections
+                            and not await self._has_remote_connections(session_id)
+                        ):
+                            return
+                finally:
+                    await self.redis_client.release_lock(f"timer:{session_id}:lock")
+
+            # Not authoritative or just released, wait before re-check
+            await asyncio.sleep(2)
+
+        # Cleanup
         if session_id in self._timer_tasks:
             del self._timer_tasks[session_id]
+        logger.info(f"Timer sync task ended for {session_id}")
 
-        logger.info(f"Timer sync ended for session {session_id}")
+    async def _listen_for_session_updates(self, session_id: str) -> None:
+        """Listen for session updates from other pods via Redis Pub/Sub."""
+        pubsub = await self.redis_client.subscribe(f"session:{session_id}:timer")
+        try:
+            logger.info(f"Started Pub/Sub listener for {session_id} on {self.pod_id}")
+            async for message in pubsub.listen():
+                if message["type"] == "message":
+                    try:
+                        data = json.loads(message["data"])
+                        await self._broadcast_to_local_clients(session_id, data)
+                    except Exception as e:
+                        logger.error(f"Error processing Pub/Sub message: {e}")
+        except asyncio.CancelledError:
+            pass
+        finally:
+            await pubsub.unsubscribe(f"session:{session_id}:timer")
+            if session_id in self._pubsub_tasks:
+                del self._pubsub_tasks[session_id]
+            logger.info(f"Stopped Pub/Sub listener for {session_id} on {self.pod_id}")
+
+    async def _broadcast_to_local_clients(
+        self, session_id: str, message: Dict[str, Any]
+    ) -> None:
+        """Broadcast a message to all connections for this session on THIS pod."""
+        connections = list(self._active_connections.get(session_id, []))
+        for conn in connections:
+            try:
+                await conn.send_json(message)
+            except Exception as e:
+                logger.error(
+                    f"Error broadcasting to local client for {session_id}: {e}"
+                )
+
+    async def _has_remote_connections(self, session_id: str) -> bool:
+        """Check if other pods have active connections for this session."""
+        pods = await self.redis_client.get_set_members(f"session:{session_id}:pods")
+        return any(p != self.pod_id for p in pods)
 
     async def _handle_disconnect(self, websocket: WebSocket, session_id: str) -> None:
         """
@@ -402,23 +454,15 @@ class DeliveryWebSocketHandler:
         if session_id in self._active_connections:
             self._active_connections[session_id].discard(websocket)
 
-            # Clean up if no more connections
+            # Clean up if no more connections on this pod
             if not self._active_connections[session_id]:
                 del self._active_connections[session_id]
-                # Note: We don't stop the timer task here - it continues
-                # server-side for server-authoritative timing
+                # Remove this pod from active pods list in Redis
+                await self.redis_client.remove_from_set(
+                    f"session:{session_id}:pods", self.pod_id
+                )
 
-        logger.info(f"WebSocket disconnected for session {session_id}")
-
-        # Log disconnect but don't pause the timer
-        try:
-            session = self.session_manager.get_session(session_id)
-            logger.info(
-                f"Session {session_id} still active with "
-                f"{session.state.value} state after client disconnect"
-            )
-        except KeyError:
-            pass
+        logger.info(f"WebSocket disconnected for session {session_id} on {self.pod_id}")
 
     async def broadcast_to_session(
         self,
@@ -426,31 +470,24 @@ class DeliveryWebSocketHandler:
         message: Dict[str, Any],
     ) -> None:
         """
-        Broadcast a message to all connected clients for a session.
+        Broadcast a message to all connected clients for a session across all pods.
 
         Args:
             session_id: The session ID
             message: The message to broadcast
         """
-        if session_id not in self._active_connections:
-            return
-
-        for conn in list(self._active_connections[session_id]):
-            try:
-                await conn.send_json(message)
-            except Exception as e:
-                logger.error(f"Broadcast error: {e}")
+        await self.redis_client.publish(f"session:{session_id}:timer", message)
 
     def get_connection_count(self, session_id: str) -> int:
-        """Get the number of active connections for a session."""
+        """Get the number of active connections for a session on THIS pod."""
         return len(self._active_connections.get(session_id, set()))
 
     def is_timer_running(self, session_id: str) -> bool:
-        """Check if the timer sync is running for a session."""
-        return session_id in self._timer_tasks
+        """Check if the timer sync or listener is running for a session."""
+        return session_id in self._timer_tasks or session_id in self._pubsub_tasks
 
     async def stop_timer(self, session_id: str) -> None:
-        """Stop the timer sync for a session."""
+        """Stop the timer sync and listener for a session."""
         if session_id in self._timer_tasks:
             self._timer_tasks[session_id].cancel()
             try:
@@ -458,6 +495,14 @@ class DeliveryWebSocketHandler:
             except asyncio.CancelledError:
                 pass
             del self._timer_tasks[session_id]
+
+        if session_id in self._pubsub_tasks:
+            self._pubsub_tasks[session_id].cancel()
+            try:
+                await self._pubsub_tasks[session_id]
+            except asyncio.CancelledError:
+                pass
+            del self._pubsub_tasks[session_id]
 
 
 # ============================================================================
