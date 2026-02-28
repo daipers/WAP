@@ -1,0 +1,13 @@
+.git
+.venv
+__pycache__
+.planning
+.DS_Store
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache
+.ruff_cache
+.vscode
+.idea
+.env

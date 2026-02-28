@@ -25,7 +25,7 @@ app.include_router(lti_router)
 app.include_router(analytics_router)
 
 # Setup templates
-templates = Jinja2Templates(directory="dev_package/templates")
+templates = Jinja2Templates(directory="templates")
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -66,7 +66,7 @@ async def root():
 async def analytics_dashboard():
     """Serve the analytics dashboard HTML."""
     dashboard_path = os.path.join(
-        os.path.dirname(__file__), "..", "..", "templates", "analytics_dashboard.html"
+        os.path.dirname(__file__), "..", "templates", "analytics_dashboard.html"
     )
 
     if os.path.exists(dashboard_path):
