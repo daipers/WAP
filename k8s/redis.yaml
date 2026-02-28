@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-headless
+  labels:
+    app: redis
+spec:
+  ports:
+    - port: 6379
+      name: redis
+    - port: 26379
+      name: sentinel
+  clusterIP: None
+  selector:
+    app: redis
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis
+spec:
+  serviceName: "redis-headless"
+  replicas: 3
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:7-alpine
+        command: ["redis-server", "--appendonly", "yes"]
+        ports:
+        - containerPort: 6379
+          name: redis
+      - name: sentinel
+        image: bitnami/redis-sentinel:latest
+        ports:
+        - containerPort: 26379
+          name: sentinel
+        env:
+        - name: REDIS_MASTER_NAME
+          value: "mymaster"
+        - name: REDIS_SENTINEL_QUORUM
+          value: "2"
+        - name: REDIS_MASTER_HOST
+          value: "localhost"
