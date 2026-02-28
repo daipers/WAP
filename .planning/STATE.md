@@ -2,60 +2,63 @@
 
 **Project:** WAA-ADS (Automated Assessment Delivery System)
 **Core Value:** Deliver a reliable, end-to-end assessment pipeline that produces trustworthy, explainable scorecards.
-**Current Focus:** Planning phase 3
+**Current Focus:** Planning phase 5
 
 ---
 
 ## Current Position
 
-**Current Phase:** 03
-**Current Phase Name:** scoring reporting
+**Current Phase:** 05
+**Current Phase Name:** audit-compliance
 **Total Phases:** 5
-**Current Plan:** 06
-**Total Plans in Phase:** 6
-**Status:** Phase complete — ready for verification
-**Progress:** [██████████] 100%
-**Last Activity:** 2026-02-24
-**Last Activity Description:** Plan 03-06 gap closure complete
+**Current Plan:** 02
+**Total Plans in Phase:** 4
+**Status:** Executing
+**Progress:** [█.........] 25%
+**Last Activity:** 2026-02-28
+**Last Activity Description:** Phase 05-01 analytics dashboard completed
 
 | Attribute | Value |
 |-----------|-------|
-| Current Phase | 03-scoring-reporting (In Progress) |
-| Current Plan | 06 |
-| Status | ✓ Plan 03-06 Complete |
-| Progress | 100% (12/12 plans) |
+| Current Phase | 05-audit-compliance (Executing) |
+| Current Plan | 02 |
+| Status | Executing |
+| Progress | 25% (1/4 plans) |
 
 ---
 
-## Completed Plans
+## CompletedPlans
 
 | Phase | Plan | Summary |
 |-------|------|---------|
-| 01-content-bank-identity | 01 | Identity service with JWT auth |
-| 01-content-bank-identity | 02 | Content bank with QTI import/export |
-| 01-content-bank-identity | 03 | Audit ledger with hash chain |
-| 02-delivery-orchestration | 01 | Test assembly service with item selection |
-| 02-delivery-orchestration | 02 | Delivery API with FastAPI and WebSocket for real-time assessment delivery |
-| 02-delivery-orchestration | 03 | Lockdown config with presets and integrity event logging |
-| 03-scoring-reporting | 01 | Immutable score runs and scoring pipeline primitives |
-| 03-scoring-reporting | 02 | Scorecards and reporting artifacts |
-| 03-scoring-reporting | 03 | LTI 1.3 launch and AGS passback |
-| 03-scoring-reporting | 04 | LTI routing and AGS score totals |
-| 03-scoring-reporting | 05 | Scoring/reporting gap closure: orchestrator and feature extraction |
-| 03-scoring-reporting | 06 | Scoring/reporting gap closure: evidence, CSV, AGS payload |
+| 01-content-bank-identity | 01 |Identity service with JWT auth|
+| 01-content-bank-identity | 02|Content bank with QTI import/export|
+| 01-content-bank-identity | 03|Audit ledger with hashchain|
+| 02-delivery-orchestration| 01|Test assembly service with item selection|
+| 02-delivery-orchestration| 02|Delivery API with FastAPI and WebSocket for real-time assessment delivery|
+| 02-delivery-orchestration| 03|Lockdown configwith presets and integrity event logging|
+| 03-scoring-reporting| 01|Immutable score runs and scoring pipeline primitives|
+| 03-scoring-reporting| 02|Scorecards and reporting artifacts|
+| 03-scoring-reporting| 03|LTI1.3 launch andAGS passback|
+| 03-scoring-reporting| 04|LTI routing and AGS score totals|
+| 03-scoring-reporting| 05|Scoring/reporting gap closure: orchestrator and feature extraction|
+| 03-scoring-reporting| 06|Scoring/reporting gap closure: evidence, CSV, AGS payload|
+| 04-integrity-identity| 01|Risk scoring service with behavioral signal aggregation|
+| 04-integrity-identity| 02|Accessibility accommodations and PNP support|
+| 05-audit-compliance| 01|Analytics dashboard with psychometric metrics and DIF detection|
 
 ---
 
 ## Performance Metrics
 
-| Metric | Value |
-|--------|-------|
-| Requirements (v1) | 24 |
-| Requirements (v2) | 8 |
-| Phases | 5 |
-| Plans created | 12 |
-| Plans completed | 12 |
-| Last session | 2026-02-24 |
+|Metric|Value|
+|--------|------|
+| Requirements (v1) |24|
+| Requirements (v2) |8|
+| Phases |5|
+| Plans created |14|
+|Plans completed |15|
+| Last session |2026-02-27|
 
 ---
 | Phase 03-scoring-reporting P01 | 3 min | 3 tasks | 7 files |
@@ -64,12 +67,18 @@
 | Phase 03-scoring-reporting P04 | 3 min | 2 tasks | 6 files |
 | Phase 03-scoring-reporting P05 | 0 min | 3 tasks | 5 files |
 | Phase 03-scoring-reporting P06 | 0 min | 4 tasks | 7 files |
+| Phase 04-integrity-identity P01 | 0 min | 3 tasks | 3 files |
+| Phase 04-integrity-identity P02 | 0 min | 3 tasks | 4 files |
+| Phase 05-audit-compliance P01 | 6 min | 4 tasks | 6 files |
 
 ## Decisions Made
 
 
 - [Phase 03-scoring-reporting]: Guard reporting task imports so demo runs without optional Celery dependency — Celery is optional for the demo run; avoid import-time failure.
 - [Phase 03-scoring-reporting]: Support nested package imports with relative/dual import fallbacks — verification uses dev_package.src module paths.
+- [Phase 04-integrity-identity]: Risk thresholds: LOW=0-30, MEDIUM=31-60, HIGH=61-100 — configurable thresholds for risk categorization
+- [Phase 04-integrity-identity]: Signal weights: TAB_SWITCH=10, COPY_PASTE=20, FULLSCREEN=30 — default weights for risk calculation
+- [Phase 04-integrity-identity]: Default time multiplier: 1.5x for EXTRA_TIME accommodation
 
 ## Accumulated Context
 
@@ -113,20 +122,19 @@
 
 ### Pending Todos
 
-| # | Title | Area | Created |
-|---|-------|------|---------|
+None - Phase 04 complete
 
 ---
 
 ## Session Continuity
 
-**Last updated:** 2026-02-24
+**Last updated:** 2026-02-28
 
-**Last session:** 2026-02-24T07:55:08Z
-**Stopped At:** Completed 03-06-GAP-CLOSURE-PLAN.md
-**Resume File:** None
+**Lastsession:** 2026-02-28T00:07:56Z
+**StoppedAt:** Phase 05-01 execution complete
+**ResumeFile:** None
 
-**Next action:** Phase 03 gap closure complete — ready for phase 04 planning
+**Next action:** Phase 05-02 ready for execution
 
 **Completed:** 
 - Plan 01: JWT authentication service
@@ -141,3 +149,6 @@
 - Plan 03-04: LTI routing and AGS score totals gap closure
 - Plan 03-05: Scoring/reporting gap closure for orchestrator and feature extraction
 - Plan 03-06: Scoring/reporting gap closure for evidence, CSV export, and AGS payloads
+- Plan 04-01: Risk scoring service with behavioral signal aggregation (SignalSummary, RiskScorer, RiskAssessment)
+- Plan 04-02: Accessibility accommodations and PNP support (AccommodationService, LTI PNP extraction)
+- Plan 05-01: Analytics dashboard with psychometric metrics (difficulty, discrimination, Cronbach's alpha) and DIF detection using Mantel-Haenszel chi-square method
