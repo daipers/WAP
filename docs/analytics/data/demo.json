@@ -1,0 +1,371 @@
+{
+  "item_performance": {
+    "assessment_id": "demo-001",
+    "items": [
+      {
+        "id": "item_01",
+        "title": "Question 1",
+        "difficulty": 0.653,
+        "discrimination": 0.466,
+        "response_count": 150
+      },
+      {
+        "id": "item_02",
+        "title": "Question 2",
+        "difficulty": 0.647,
+        "discrimination": 0.548,
+        "response_count": 150
+      },
+      {
+        "id": "item_03",
+        "title": "Question 3",
+        "difficulty": 0.66,
+        "discrimination": 0.441,
+        "response_count": 150
+      },
+      {
+        "id": "item_04",
+        "title": "Question 4",
+        "difficulty": 0.667,
+        "discrimination": 0.437,
+        "response_count": 150
+      },
+      {
+        "id": "item_05",
+        "title": "Question 5",
+        "difficulty": 0.533,
+        "discrimination": 0.598,
+        "response_count": 150
+      },
+      {
+        "id": "item_06",
+        "title": "Question 6",
+        "difficulty": 0.687,
+        "discrimination": 0.473,
+        "response_count": 150
+      },
+      {
+        "id": "item_07",
+        "title": "Question 7",
+        "difficulty": 0.647,
+        "discrimination": 0.415,
+        "response_count": 150
+      },
+      {
+        "id": "item_08",
+        "title": "Question 8",
+        "difficulty": 0.687,
+        "discrimination": 0.406,
+        "response_count": 150
+      },
+      {
+        "id": "item_09",
+        "title": "Question 9",
+        "difficulty": 0.647,
+        "discrimination": 0.423,
+        "response_count": 150
+      },
+      {
+        "id": "item_10",
+        "title": "Question 10",
+        "difficulty": 0.62,
+        "discrimination": 0.458,
+        "response_count": 150
+      },
+      {
+        "id": "item_11",
+        "title": "Question 11",
+        "difficulty": 0.62,
+        "discrimination": 0.439,
+        "response_count": 150
+      },
+      {
+        "id": "item_12",
+        "title": "Question 12",
+        "difficulty": 0.673,
+        "discrimination": 0.517,
+        "response_count": 150
+      },
+      {
+        "id": "item_13",
+        "title": "Question 13",
+        "difficulty": 0.627,
+        "discrimination": 0.553,
+        "response_count": 150
+      },
+      {
+        "id": "item_14",
+        "title": "Question 14",
+        "difficulty": 0.687,
+        "discrimination": 0.409,
+        "response_count": 150
+      },
+      {
+        "id": "item_15",
+        "title": "Question 15",
+        "difficulty": 0.707,
+        "discrimination": 0.406,
+        "response_count": 150
+      },
+      {
+        "id": "item_16",
+        "title": "Question 16",
+        "difficulty": 0.733,
+        "discrimination": 0.44,
+        "response_count": 150
+      },
+      {
+        "id": "item_17",
+        "title": "Question 17",
+        "difficulty": 0.7,
+        "discrimination": 0.435,
+        "response_count": 150
+      },
+      {
+        "id": "item_18",
+        "title": "Question 18",
+        "difficulty": 0.62,
+        "discrimination": 0.577,
+        "response_count": 150
+      },
+      {
+        "id": "item_19",
+        "title": "Question 19",
+        "difficulty": 0.58,
+        "discrimination": 0.544,
+        "response_count": 150
+      },
+      {
+        "id": "item_20",
+        "title": "Question 20",
+        "difficulty": 0.667,
+        "discrimination": 0.468,
+        "response_count": 150
+      },
+      {
+        "id": "item_21",
+        "title": "Question 21",
+        "difficulty": 0.673,
+        "discrimination": 0.511,
+        "response_count": 150
+      },
+      {
+        "id": "item_22",
+        "title": "Question 22",
+        "difficulty": 0.633,
+        "discrimination": 0.436,
+        "response_count": 150
+      },
+      {
+        "id": "item_23",
+        "title": "Question 23",
+        "difficulty": 0.64,
+        "discrimination": 0.404,
+        "response_count": 150
+      },
+      {
+        "id": "item_24",
+        "title": "Question 24",
+        "difficulty": 0.633,
+        "discrimination": 0.569,
+        "response_count": 150
+      },
+      {
+        "id": "item_25",
+        "title": "Question 25",
+        "difficulty": 0.693,
+        "discrimination": 0.582,
+        "response_count": 150
+      }
+    ],
+    "summary": {
+      "mean_difficulty": 0.68,
+      "reliability": 0.84
+    }
+  },
+  "fairness_report": {
+    "assessment_id": "demo-001",
+    "group_attribute": "gender",
+    "dif_results": {
+      "item_01": {
+        "chi_square": 1.067,
+        "p_value": 0.5,
+        "classification": "no_DIF",
+        "reference_pass_rate": 0.707,
+        "focal_pass_rate": 0.6
+      },
+      "item_02": {
+        "chi_square": -0.133,
+        "p_value": 0.5,
+        "classification": "no_DIF",
+        "reference_pass_rate": 0.64,
+        "focal_pass_rate": 0.653
+      },
+      "item_03": {
+        "chi_square": 1.2,
+        "p_value": 0.5,
+        "classification": "no_DIF",
+        "reference_pass_rate": 0.72,
+        "focal_pass_rate": 0.6
+      },
+      "item_04": {
+        "chi_square": -1.333,
+        "p_value": 0.5,
+        "classification": "no_DIF",
+        "reference_pass_rate": 0.6,
+        "focal_pass_rate": 0.733
+      },
+      "item_05": {
+        "chi_square": 2.933,
+        "p_value": 0.001,
+        "classification": "severe_DIF",
+        "reference_pass_rate": 0.68,
+        "focal_pass_rate": 0.387
+      },
+      "item_06": {
+        "chi_square": -0.667,
+        "p_value": 0.5,
+        "classification": "no_DIF",
+        "reference_pass_rate": 0.653,
+        "focal_pass_rate": 0.72
+      },
+      "item_07": {
+        "chi_square": -0.133,
+        "p_value": 0.5,
+        "classification": "no_DIF",
+        "reference_pass_rate": 0.64,
+        "focal_pass_rate": 0.653
+      },
+      "item_08": {
+        "chi_square": 0.667,
+        "p_value": 0.5,
+        "classification": "no_DIF",
+        "reference_pass_rate": 0.72,
+        "focal_pass_rate": 0.653
+      },
+      "item_09": {
+        "chi_square": 0.133,
+        "p_value": 0.5,
+        "classification": "no_DIF",
+        "reference_pass_rate": 0.653,
+        "focal_pass_rate": 0.64
+      },
+      "item_10": {
+        "chi_square": 0.133,
+        "p_value": 0.5,
+        "classification": "no_DIF",
+        "reference_pass_rate": 0.627,
+        "focal_pass_rate": 0.613
+      },
+      "item_11": {
+        "chi_square": 0.667,
+        "p_value": 0.5,
+        "classification": "no_DIF",
+        "reference_pass_rate": 0.653,
+        "focal_pass_rate": 0.587
+      },
+      "item_12": {
+        "chi_square": -0.4,
+        "p_value": 0.5,
+        "classification": "no_DIF",
+        "reference_pass_rate": 0.653,
+        "focal_pass_rate": 0.693
+      },
+      "item_13": {
+        "chi_square": -1.6,
+        "p_value": 0.5,
+        "classification": "moderate_DIF",
+        "reference_pass_rate": 0.547,
+        "focal_pass_rate": 0.707
+      },
+      "item_14": {
+        "chi_square": 1.2,
+        "p_value": 0.5,
+        "classification": "no_DIF",
+        "reference_pass_rate": 0.747,
+        "focal_pass_rate": 0.627
+      },
+      "item_15": {
+        "chi_square": -0.267,
+        "p_value": 0.5,
+        "classification": "no_DIF",
+        "reference_pass_rate": 0.693,
+        "focal_pass_rate": 0.72
+      },
+      "item_16": {
+        "chi_square": 0.0,
+        "p_value": 0.5,
+        "classification": "no_DIF",
+        "reference_pass_rate": 0.733,
+        "focal_pass_rate": 0.733
+      },
+      "item_17": {
+        "chi_square": -0.933,
+        "p_value": 0.5,
+        "classification": "no_DIF",
+        "reference_pass_rate": 0.653,
+        "focal_pass_rate": 0.747
+      },
+      "item_18": {
+        "chi_square": -0.4,
+        "p_value": 0.5,
+        "classification": "no_DIF",
+        "reference_pass_rate": 0.6,
+        "focal_pass_rate": 0.64
+      },
+      "item_19": {
+        "chi_square": -0.667,
+        "p_value": 0.5,
+        "classification": "no_DIF",
+        "reference_pass_rate": 0.547,
+        "focal_pass_rate": 0.613
+      },
+      "item_20": {
+        "chi_square": -0.8,
+        "p_value": 0.5,
+        "classification": "no_DIF",
+        "reference_pass_rate": 0.627,
+        "focal_pass_rate": 0.707
+      },
+      "item_21": {
+        "chi_square": -0.933,
+        "p_value": 0.5,
+        "classification": "no_DIF",
+        "reference_pass_rate": 0.627,
+        "focal_pass_rate": 0.72
+      },
+      "item_22": {
+        "chi_square": 1.467,
+        "p_value": 0.5,
+        "classification": "no_DIF",
+        "reference_pass_rate": 0.707,
+        "focal_pass_rate": 0.56
+      },
+      "item_23": {
+        "chi_square": -1.333,
+        "p_value": 0.5,
+        "classification": "no_DIF",
+        "reference_pass_rate": 0.573,
+        "focal_pass_rate": 0.707
+      },
+      "item_24": {
+        "chi_square": 0.133,
+        "p_value": 0.5,
+        "classification": "no_DIF",
+        "reference_pass_rate": 0.64,
+        "focal_pass_rate": 0.627
+      },
+      "item_25": {
+        "chi_square": -0.267,
+        "p_value": 0.5,
+        "classification": "no_DIF",
+        "reference_pass_rate": 0.68,
+        "focal_pass_rate": 0.707
+      }
+    },
+    "summary": {
+      "biased_items_count": 1,
+      "impact_score": 95.0
+    }
+  }
+}
