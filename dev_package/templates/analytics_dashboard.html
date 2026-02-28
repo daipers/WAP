@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard - Item Performance</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+        
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #666;
+        }
+        
+        input, select {
+            padding: 10px 15px;
+            border: 2px solid #e1e5eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+        
+        button:hover {
+            background: #5a6fd6;
+            transform: translateY(-2px);
+        }
+        
+        button.secondary {
+            background: #6c757d;
+        }
+        
+        button.secondary:hover {
+            background: #5a6268;
+        }
+        
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .card-title {
+            font-size: 0.9rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        
+        .card-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #333;
+        }
+        
+        .card-value.highlight {
+            color: #667eea;
+        }
+        
+        .card-value.warning {
+            color: #f59e0b;
+        }
+        
+        .card-value.danger {
+            color: #ef4444;
+        }
+        
+        .section {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #555;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .badge-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .badge-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .badge-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 20px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+        
+        .error-message {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .card-value {
+                font-size: 2rem;
+            }
+            
+            th, td {
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Analytics Dashboard</h1>
+            <p class="subtitle">Item Performance & Fairness Analysis</p>
+        </header>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label for="assessmentId">Assessment ID</label>
+                <input type="text" id="assessmentId" value="DEMO001" placeholder="Enter assessment ID">
+            </div>
+            <div class="control-group">
+                <label for="groupAttribute">Group Attribute</label>
+                <select id="groupAttribute">
+                    <option value="gender">Gender</option>
+                    <option value="ethnicity">Ethnicity</option>
+                    <option value="disability_status">Disability Status</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="difMethod">DIF Method</label>
+                <select id="difMethod">
+                    <option value="chi_square">Mantel-Haenszel Chi-Square</option>
+                    <option value="logistic">Logistic Regression</option>
+                </select>
+            </div>
+            <button onclick="loadData()">Load Analytics</button>
+            <button class="secondary" onclick="exportCSV()">Export CSV</button>
+        </div>
+        
+        <div id="errorContainer" class="hidden">
+            <div class="error-message" id="errorMessage"></div>
+        </div>
+        
+        <div id="results" class="hidden">
+            <div class="summary-cards">
+                <div class="card">
+                    <div class="card-title">Total Items</div>
+                    <div class="card-value highlight" id="totalItems">-</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Avg Difficulty</div>
+                    <div class="card-value" id="avgDifficulty">-</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Avg Discrimination</div>
+                    <div class="card-value" id="avgDiscrimination">-</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Cronbach's Alpha</div>
+                    <div class="card-value" id="cronbachAlpha">-</div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">Item Performance Metrics</h2>
+                <div class="chart-container">
+                    <canvas id="difficultyChart"></canvas>
+                </div>
+                <table id="itemTable">
+                    <thead>
+                        <tr>
+                            <th>Item ID</th>
+                            <th>Difficulty (p-value)</th>
+                            <th>Discrimination</th>
+                            <th>Responses</th>
+                        </tr>
+                    </thead>
+                    <tbody id="itemTableBody">
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">Differential Item Functioning (DIF) Analysis</h2>
+                <div class="summary-cards">
+                    <div class="card">
+                        <div class="card-title">No DIF</div>
+                        <div class="card-value" id="noDifCount">-</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Minor DIF</div>
+                        <div class="card-value" id="minorDifCount">-</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Moderate DIF</div>
+                        <div class="card-value warning" id="moderateDifCount">-</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Severe DIF</div>
+                        <div class="card-value danger" id="severeDifCount">-</div>
+                </div>
+                <table id="difTable">
+                    <thead>
+                        <tr>
+                            <th>Item ID</th>
+                            <th>Reference Rate</th>
+                            <th>Focal Rate</th>
+                            <th>Chi-Square</th>
+                            <th>Classification</th>
+                        </tr>
+                    </thead>
+                    <tbody id="difTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div id="loading" class="loading hidden">
+            <p>Loading analytics data...</p>
+        </div>
+    </div>
+    
+    <script>
+        let difficultyChart = null;
+        let itemPerformanceData = null;
+        let fairnessData = null;
+        
+        async function loadData() {
+            const assessmentId = document.getElementById('assessmentId').value;
+            const groupAttribute = document.getElementById('groupAttribute').value;
+            const difMethod = document.getElementById('difMethod').value;
+            
+            if (!assessmentId) {
+                showError('Please enter an assessment ID');
+                return;
+            }
+            
+            showLoading(true);
+            hideError();
+            
+            try {
+                // Load item performance
+                const perfResponse = await fetch(
+                    `/api/analytics/item-performance?assessment_id=${assessmentId}`
+                );
+                
+                if (!perfResponse.ok) {
+                    throw new Error(`Failed to load item performance: ${perfResponse.statusText}`);
+                }
+                
+                itemPerformanceData = await perfResponse.json();
+                
+                // Load fairness report
+                const fairnessResponse = await fetch(
+                    `/api/analytics/fairness-report?assessment_id=${assessmentId}&group_attribute=${groupAttribute}&method=${difMethod}`
+                );
+                
+                if (!fairnessResponse.ok) {
+                    throw new Error(`Failed to load fairness report: ${fairnessResponse.statusText}`);
+                }
+                
+                fairnessData = await fairnessResponse.json();
+                
+                // Display data
+                displayResults();
+                
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                showLoading(false);
+            }
+        }
+        
+        function displayResults() {
+            document.getElementById('results').classList.remove('hidden');
+            
+            // Display summary cards
+            const summary = itemPerformanceData.summary;
+            document.getElementById('totalItems').textContent = summary.total_items;
+            document.getElementById('avgDifficulty').textContent = summary.average_difficulty.toFixed(3);
+            document.getElementById('avgDiscrimination').textContent = summary.average_discrimination.toFixed(3);
+            document.getElementById('cronbachAlpha').textContent = summary.cronbach_alpha.toFixed(3);
+            
+            // Display item performance table
+            const tbody = document.getElementById('itemTableBody');
+            tbody.innerHTML = '';
+            
+            itemPerformanceData.items.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.item_id}</td>
+                    <td>${item.difficulty.toFixed(4)}</td>
+                    <td>${item.discrimination.toFixed(4)}</td>
+                    <td>${item.response_count}</td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            // Display difficulty chart
+            displayDifficultyChart();
+            
+            // Display DIF results
+            displayDIFResults();
+        }
+        
+        function displayDifficultyChart() {
+            const ctx = document.getElementById('difficultyChart').getContext('2d');
+            
+            const items = itemPerformanceData.items;
+            const labels = items.map(i => i.item_id);
+            const difficulties = items.map(i => i.difficulty);
+            const discriminations = items.map(i => i.discrimination);
+            
+            if (difficultyChart) {
+                difficultyChart.destroy();
+            }
+            
+            difficultyChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Difficulty',
+                            data: difficulties,
+                            backgroundColor: 'rgba(102, 126, 234, 0.7)',
+                            borderColor: 'rgba(102, 126, 234, 1)',
+                            borderWidth: 1,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Discrimination',
+                            data: discriminations,
+                            backgroundColor: 'rgba(245, 158, 11, 0.7)',
+                            borderColor: 'rgba(245, 158, 11, 1)',
+                            borderWidth: 1,
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Difficulty (p-value)'
+                            },
+                            min: 0,
+                            max: 1
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'Discrimination'
+                            },
+                            min: -1,
+                            max: 1,
+                            grid: {
+                                drawOnChartArea: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function displayDIFResults() {
+            const summary = fairnessData.summary;
+            const classifications = summary.classifications;
+            
+            document.getElementById('noDifCount').textContent = classifications.no_DIF || 0;
+            document.getElementById('minorDifCount').textContent = classifications.minor_DIF || 0;
+            document.getElementById('moderateDifCount').textContent = classifications.moderate_DIF || 0;
+            document.getElementById('severeDifCount').textContent = classifications.severe_DIF || 0;
+            
+            // Display DIF table
+            const tbody = document.getElementById('difTableBody');
+            tbody.innerHTML = '';
+            
+            const difResults = fairnessData.dif_results;
+            for (const [itemId, result] of Object.entries(difResults)) {
+                if (result.classification === 'error') continue;
+                
+                const row = document.createElement('tr');
+                const badgeClass = getBadgeClass(result.classification);
+                
+                row.innerHTML = `
+                    <td>${itemId}</td>
+                    <td>${(result.reference_pass_rate || 0).toFixed(4)}</td>
+                    <td>${(result.focal_pass_rate || 0).toFixed(4)}</td>
+                    <td>${(result.chi_square || 0).toFixed(4)}</td>
+                    <td><span class="badge ${badgeClass}">${result.classification}</span></td>
+                `;
+                tbody.appendChild(row);
+            }
+        }
+        
+        function getBadgeClass(classification) {
+            switch (classification) {
+                case 'no_DIF':
+                    return 'badge-success';
+                case 'minor_DIF':
+                    return 'badge-warning';
+                case 'moderate_DIF':
+                case 'severe_DIF':
+                    return 'badge-danger';
+                default:
+                    return '';
+            }
+        }
+        
+        async function exportCSV() {
+            const assessmentId = document.getElementById('assessmentId').value;
+            
+            if (!assessmentId) {
+                showError('Please enter an assessment ID');
+                return;
+            }
+            
+            try {
+                const response = await fetch(
+                    `/api/analytics/export?assessment_id=${assessmentId}&format=csv`
+                );
+                
+                if (!response.ok) {
+                    throw new Error(`Export failed: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                // Download CSV
+                const blob = new Blob([data.data], { type: 'text/csv' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `analytics_${assessmentId}_${new Date().toISOString().split('T')[0]}.csv`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+                
+            } catch (error) {
+                showError(error.message);
+            }
+        }
+        
+        function showError(message) {
+            document.getElementById('errorContainer').classList.remove('hidden');
+            document.getElementById('errorMessage').textContent = message;
+        }
+        
+        function hideError() {
+            document.getElementById('errorContainer').classList.add('hidden');
+        }
+        
+        function showLoading(show) {
+            const loading = document.getElementById('loading');
+            const results = document.getElementById('results');
+            
+            if (show) {
+                loading.classList.remove('hidden');
+                results.classList.add('hidden');
+            } else {
+                loading.classList.add('hidden');
+            }
+        }
+        
+        // Load data on page load with demo data
+        window.addEventListener('DOMContentLoaded', () => {
+            loadData();
+        });
+    </script>
+</body>
+</html>
