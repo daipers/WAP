@@ -8,9 +8,9 @@
 
 - [x] **Phase 1: Content Bank & Identity Foundations** — Item bank, QTI import/export, identity, session management, audit foundations
 - [x] **Phase 2: Delivery Orchestration** — Test assembly, content delivery, timing, navigation, save/resume, integrity controls
-- [ ] **Phase 3: Scoring & Reporting Engine** — Feature extraction, scoring engine, scorecards, LTI grade passback
-- [ ] **Phase 4: Integrity & Identity Controls** — Behavioral signals, risk-tiered identity assurance, lockdown controls (v2)
-- [ ] **Phase 5: Audit & Compliance Hardening** — Immutable audit ledger, data retention, compliance reporting (v2)
+- [x] **Phase 3: Scoring & Reporting Engine** — Feature extraction, scoring engine, scorecards, LTI grade passback
+- [x] **Phase 4: Integrity & Identity Controls** — Behavioral signals, risk-tiered identity assurance, lockdown controls (v2)
+- [x] **Phase 5: Audit & Compliance Hardening** — Immutable audit ledger, data retention, compliance reporting (v2)
 
 ---
 
@@ -113,7 +113,10 @@
 3. System supports accessibility accommodations including extra time and alternative formats
 4. System respects PNP (personal needs and preferences) from LTI launch
 
-**Plans:** TBD
+**Plans:** 2 plans
+
+- [ ] 04-01-PLAN.md — Risk scoring service and behavioral signal aggregation (ACCS-01, ACCS-02)
+- [ ] 04-02-PLAN.md — Accessibility accommodations and PNP support (ADPT-01, ADPT-02)
 
 ---
 
@@ -131,7 +134,12 @@
 3. Immutable audit ledger with cryptographic hash chains
 4. Data retention and disclosure controls align with FERPA
 
-**Plans:** TBD
+**Plans:** 4 plans
+
+- [ ] 05-01-PLAN.md — Analytics dashboard and item performance metrics (ANLY-01)
+- [ ] 05-02-PLAN.md — DIF detection and fairness analysis (ANLY-01)
+- [ ] 05-03-PLAN.md — Merkle tree audit ledger extension (ANLY-02)
+- [ ] 05-04-PLAN.md — FERPA retention policies and disposal service (ANLY-02)
 
 ---
 
@@ -141,9 +149,9 @@
 |-------|----------------|--------|-----------|
 | 1. Content Bank & Identity | 3/3 | ✓ Complete | 2026-02-22 |
 | 2. Delivery Orchestration | 3/3 | ✓ Complete | 2026-02-22 |
-| 3. Scoring & Reporting | 6/7 | In progress | 2026-02-23 |
-| 4. Integrity & Identity | 0/1 | Not started | - |
-| 5. Audit & Compliance | 0/1 | Not started | - |
+| 3. Scoring & Reporting | 7/7 | ✓ Complete | 2026-02-25 |
+| 4. Integrity & Identity | 2/2 | ✓ Complete | 2026-02-27 |
+| 5. Audit & Compliance | 4/4 | ✓ Complete | 2026-02-27 |
 
 ---
 
