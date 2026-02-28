@@ -11,18 +11,18 @@
 **Current Phase:** 06
 **Current Phase Name:** infrastructure-hardening
 **Total Phases in Milestone:** 5
-**Current Plan:** 01
+**Current Plan:** 02
 **Total Plans in Phase:** 3
 **Status:** Executing Phase 06
-**Progress:** [||..........] 20%
+**Progress:** [|||.........] 30%
 **Last Activity:** 2026-02-27
-**Last Activity Description:** Phase 06 Plan 01 complete: Containerization and HA K8s manifests.
+**Last Activity Description:** Phase 06 Plan 02 complete: Security & Hardening (Identity Service migration to PostgreSQL).
 
 | Attribute | Value |
 |-----------|-------|
 | Current Phase | 06-infrastructure |
 | Status | Executing |
-| Progress | 20% (1/5 phases) |
+| Progress | 30% |
 
 ---
 
@@ -31,6 +31,7 @@
 | Phase | Plan | Summary |
 |-------|------|---------|
 | 06-infrastructure | 01 | Containerized the FastAPI application and established HA K8s manifests for App, DB, and Redis. |
+| 06-infrastructure | 02 | Migrated Identity Service to PostgreSQL with pgcrypto PII encryption and async SQLAlchemy ORM. |
 
 ---
 
@@ -40,7 +41,7 @@
 |--------|-------|
 | Requirements (v2) | 13 |
 | Phases | 5 (Phases 06-10) |
-| Plans completed | 1 |
+| Plans completed | 2 |
 | Last session | 2026-02-27 |
 
 ---
@@ -54,11 +55,12 @@
 - [06-01]: Use multi-stage Docker build to minimize image size.
 - [06-01]: Use StatefulSets for Postgres and Redis to ensure stable identities and persistent storage.
 - [06-01]: Use Nginx sticky sessions (affinity) in Ingress to support stateful WebSocket connections.
+- [06-02]: Used PGcryptoString as a SQLAlchemy TypeDecorator for transparent application-level PII encryption.
 
 ---
 
 ## Session Continuity
 
 **Last updated:** 2026-02-27
-**StoppedAt:** Phase 06 Plan 01 complete.
-**Next action:** Execute Phase 06 Plan 02 (Security & Hardening).
+**StoppedAt:** Phase 06 Plan 02 complete.
+**Next action:** Execute Phase 06 Plan 03 (Secrets Management & Observability).
