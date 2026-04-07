@@ -1,127 +1,44 @@
-# Requirements: WAA-ADS
+# Requirements: WAA-ADS Milestone v2.0
 
-**Defined:** 2026-02-22
-**Core Value:** Deliver a reliable, end-to-end assessment pipeline that produces trustworthy, explainable scorecards.
-
-## v1 Requirements
-
-### Identity & Session
-
-- [ ] **IDEN-01**: User can create and manage identity records for assessment candidates
-- [ ] **IDEN-02**: User can authenticate and authorize access to assessment sessions
-- [ ] **IDEN-03**: Session persists across browser refresh and maintains attempt state
-
-### Content Bank
-
-- [ ] **CONT-01**: User can import items from QTI packages
-- [ ] **CONT-02**: User can export items to QTI format for portability
-- [ ] **CONT-03**: User can store items with metadata (tags, difficulty, time limits)
-- [ ] **CONT-04**: User can version items and track changes
-
-### Test Assembly
-
-- [ ] **TEST-01**: User can assemble tests from item bank with sections
-- [ ] **TEST-02**: User can define item selection rules and ordering
-- [ ] **TEST-03**: User can set timing, navigation, and attempt limits
-
-### Delivery
-
-- [ ] **DELV-01**: Candidate can take assessment with timed, navigable interface
-- [ ] **DELV-02**: Candidate can save progress and resume within session
-- [ ] **DELV-03**: Server maintains authoritative timing even on client disconnect
-
-### Scoring
-
-- [ ] **SCR-01**: System scores response-based items automatically
-- [ ] **SCR-02**: System supports custom scoring rules per item/test
-- [ ] **SCR-03**: Scores are versioned and reproducible
-
-### Reporting
-
-- [ ] **REPT-01**: System generates candidate scorecard with breakdown
-- [ ] **REPT-02**: System exports results to CSV format
-- [ ] **REPT-03**: Scorecards link scores to evidence (item responses)
-
-### Audit & Integrity
-
-- [ ] **AUDT-01**: System records immutable audit log for each assessment attempt
-- [ ] **AUDT-02**: System captures delivery events (start, answer, submit, terminate)
-- [ ] **INTG-01**: System supports configurable lockdown/integrity controls
-- [ ] **INTG-02**: Integrity events are logged with timestamps
-
-### Integration
-
-- [ ] **INTG-03**: System supports LTI 1.3 launch from LMS
-- [ ] **INTG-04**: System sends grade passback via LTI Outcomes
+**Milestone:** Institutional Production Readiness & Intelligent Growth
+**Defined:** 2026-02-27
+**Core Value:** Transform WAA-ADS into a secure, scalable, and self-growing assessment platform.
 
 ## v2 Requirements
 
-### Accessibility
+### Production Hardening (HRDN)
+- **HRDN-01**: Implement application-layer PII encryption using `pgcrypto` for sensitive candidate data.
+- **HRDN-02**: Establish highly available (HA) infrastructure using Kubernetes with Redis Sentinel and Postgres StatefulSets.
+- **HRDN-03**: Implement WebSocket sticky sessions in Ingress to ensure stateful delivery stability.
+- **HRDN-04**: Enable `pgAudit` for legally defensible compliance tracking of all data modifications.
 
-- **ACCS-01**: System supports accessibility accommodations (extra time, alternative formats)
-- **ACCS-02**: System respects PNP (personal needs and preferences) from LTI
+### Intelligent Assessment (INTL)
+- **INTL-01**: Implement a live 3PL IRT engine for real-time ability estimation (EAP method).
+- **INTL-02**: Develop a next-item selection algorithm based on Maximum Fisher Information (MFI).
+- **INTL-03**: Build an LLM-powered AIG pipeline that generates valid QTI 3.0 items from source text.
+- **INTL-04**: Implement experimental seeding logic to collect calibration data for AI-generated items.
 
-### Adaptive Testing
+### Growth & Acquisition (GRTH)
+- **GRTH-01**: Build the Wizards Apprentice Agent to discover candidates via HeroHunt.ai API across LinkedIn and GitHub.
+- **GRTH-02**: Implement AI-driven personalized outreach sequences via Instantly.ai integration.
+- **GRTH-03**: Create automated assessment funnel that links discovered profiles to active WAA-ADS sessions.
 
-- **ADPT-01**: System supports branching/adaptive item selection
-- **ADPT-02**: System tracks item statistics for IRT calibration
-
-### Advanced Integrity
-
-- **INTG-05**: System captures behavioral signals during assessment
-- **INTG-06**: System provides risk scoring for integrity review
-
-### Analytics
-
-- **ANLY-01**: System provides item performance analytics dashboard
-- **ANLY-02**: System detects item bias/fairness issues
-
-## Out of Scope
-
-| Feature | Reason |
-|---------|--------|
-| Real-time video proctoring | High privacy/cost concerns, defer to v2 with risk-based approach |
-| Offline/low-bandwidth delivery | Significant platform investment, not core to v1 |
-| Proprietary item format | QTI is the standard, avoid vendor lock-in |
-| Fully automated pass/fail for high-stakes | Due-process risks, require human review for edge cases |
+### Accessibility & UI (ACCS)
+- **ACCS-03**: Achieve WCAG 2.2 Level AA compliance for the unified Candidate Portal.
+- **ACCS-04**: Implement keyboard-navigable "Grab-and-Place" patterns for complex QTI interaction types.
 
 ## Traceability
 
-Which phases cover which requirements. Updated during roadmap creation.
-
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| IDEN-01 | Phase 1 | Pending |
-| IDEN-02 | Phase 1 | Pending |
-| IDEN-03 | Phase 1 | Pending |
-| CONT-01 | Phase 1 | Pending |
-| CONT-02 | Phase 1 | Pending |
-| CONT-03 | Phase 1 | Pending |
-| CONT-04 | Phase 1 | Pending |
-| AUDT-01 | Phase 1 | Pending |
-| AUDT-02 | Phase 1 | Pending |
-| TEST-01 | Phase 2 | Pending |
-| TEST-02 | Phase 2 | Pending |
-| TEST-03 | Phase 2 | Pending |
-| DELV-01 | Phase 2 | Pending |
-| DELV-02 | Phase 2 | Pending |
-| DELV-03 | Phase 2 | Pending |
-| INTG-01 | Phase 2 | Pending |
-| INTG-02 | Phase 2 | Pending |
-| SCR-01 | Phase 3 | Pending |
-| SCR-02 | Phase 3 | Pending |
-| SCR-03 | Phase 3 | Pending |
-| REPT-01 | Phase 3 | Pending |
-| REPT-02 | Phase 3 | Pending |
-| REPT-03 | Phase 3 | Pending |
-| INTG-03 | Phase 3 | Pending |
-| INTG-04 | Phase 3 | Pending |
+| HRDN-01, 02, 03 | Phase 06 | Pending |
+| INTL-01, 02 | Phase 07 | Pending |
+| INTL-03, 04 | Phase 08 | Pending |
+| GRTH-01, 02, 03 | Phase 09 | Pending |
+| HRDN-04, ACCS-03, 04 | Phase 10 | Pending |
 
-**Coverage:**
-- v1 requirements: 24 total
-- Mapped to phases: 24
-- Unmapped: 0 ✓
-
----
-*Requirements defined: 2026-02-22*
-*Last updated: 2026-02-22 after roadmap creation*
+## Success Criteria (Operational Readiness)
+1. **Security**: Audit confirms all PII is encrypted at rest and in transit with comprehensive access logs.
+2. **Precision**: Adaptive engine converges on ability estimates with SE < 0.3 within 20 items.
+3. **Growth**: Wizards Agent successfully converts 5% of discovered profiles to assessment starts.
+4. **Compliance**: Lighthouse Accessibility score > 95 and passing manual WCAG 2.2 audit.

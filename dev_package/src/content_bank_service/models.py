@@ -20,6 +20,10 @@ class ItemMetadata:
     time_limit_minutes: int = 0
     domain: str = ""
     skill_tags: List[str] = field(default_factory=list)
+    # 3PL IRT parameters
+    a: float = 1.0  # discrimination
+    b: float = 0.0  # difficulty
+    c: float = 0.25  # pseudo-guessing
 
 
 @dataclass

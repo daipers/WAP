@@ -21,6 +21,11 @@ from typing import Dict, List, Optional, Any
 import uuid
 
 from .models import AssessmentDefinition, AssessmentSession as ModelAssessmentSession
+from .accommodations import (
+    AccommodationService,
+    AccommodationProfile,
+    AccommodationType,
+)
 from identity_service.identity import IdentityService
 
 
@@ -103,6 +108,7 @@ class AssessmentSession:
     completed_at: Optional[datetime] = None
     sections: List[SessionSection] = field(default_factory=list)
     navigation_mode: str = "LINEAR"
+    accommodation_profile: Optional[AccommodationProfile] = None
 
     def _get_all_items(self) -> List[AssessmentItemData]:
         """Get all items across all sections as a flat list."""
@@ -313,15 +319,27 @@ class SessionManager:
     Handles creation, retrieval, state transitions, and persistence.
     """
 
-    def __init__(self, identity_service: Optional[IdentityService] = None):
+    def __init__(
+        self,
+        identity_service: Optional[IdentityService] = None,
+        accommodation_service: Optional[AccommodationService] = None,
+    ):
         """
         Initialize the session manager.
 
         Args:
             identity_service: Optional IdentityService for candidate validation.
+            accommodation_service: Optional AccommodationService for accessibility support.
         """
         self._sessions: Dict[str, AssessmentSession] = {}
         self._identity_service = identity_service
+        self._accommodation_service = accommodation_service or AccommodationService()
+
+    def set_accommodation_service(
+        self, accommodation_service: AccommodationService
+    ) -> None:
+        """Set or update the accommodation service."""
+        self._accommodation_service = accommodation_service
 
     def set_identity_service(self, identity_service: IdentityService) -> None:
         """Set or update the identity service."""
@@ -340,6 +358,7 @@ class SessionManager:
         candidate_id: str,
         test_taker_id: str,
         assembled_test: Dict[str, Any],
+        accommodation_profile: Optional[AccommodationProfile] = None,
     ) -> AssessmentSession:
         """
         Create a new assessment session.
@@ -349,6 +368,7 @@ class SessionManager:
             candidate_id: The candidate's ID
             test_taker_id: The test taker's ID
             assembled_test: The pre-assembled test from TestAssemblyService
+            accommodation_profile: Optional accommodation profile for accessibility
 
         Returns:
             New AssessmentSession
@@ -378,6 +398,19 @@ class SessionManager:
                 )
             )
 
+        # Calculate time limit with accommodation
+        time_limit_seconds = assessment_definition.time_limit_seconds
+        if accommodation_profile and accommodation_profile.has_accommodation(
+            AccommodationType.EXTRA_TIME
+        ):
+            # Get base time in minutes for accommodation calculation
+            base_minutes = time_limit_seconds // 60 if time_limit_seconds else 0
+            if base_minutes > 0:
+                adjusted_minutes = self._accommodation_service.get_adjusted_time_limit(
+                    base_minutes, accommodation_profile, session_id
+                )
+                time_limit_seconds = adjusted_minutes * 60
+
         # Create session
         session = AssessmentSession(
             session_id=session_id,
@@ -386,9 +419,10 @@ class SessionManager:
             candidate_id=candidate_id,
             title=assessment_definition.title,
             state=SessionState.NOT_STARTED,
-            time_limit_seconds=assessment_definition.time_limit_seconds,
+            time_limit_seconds=time_limit_seconds,
             sections=sections,
             navigation_mode=assessment_definition.navigation_mode.value,
+            accommodation_profile=accommodation_profile,
         )
 
         self._sessions[session_id] = session

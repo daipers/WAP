@@ -4,14 +4,17 @@
 **Shipped:** 2026-02-27
 **Status:** Functional core complete. End-to-end assessment pipeline with QTI content, delivery orchestration, psychometric analytics, and LTI 1.3 support.
 
-## Next Milestone Goals
-- Adaptive testing engine implementation
-- Automated Item Generation (AIG) via LLM
-- Enhanced accessibility (WCAG 2.2) and screen reader support
-- Database-backed analytics (migrating from mock data)
+## Active Milestone (v2.0): Institutional Production Readiness
+**Theme:** "From Demo to Deployable"
+**Goals:**
+- **Production Hardening**: HA Kubernetes stack, application-layer PII encryption (`pgcrypto`), and `pgAudit`.
+- **Intelligent Assessment**: Live 3PL IRT engine (CAT) and LLM-powered Item Generation (AIG).
+- **Growth Agent**: "Wizards Apprentice" social discovery and outreach automation (HeroHunt/Instantly).
+- **Compliance**: WCAG 2.2 Level AA accessibility and Unified Candidate Portal.
 
 ## What This Is
 WAA-ADS is an automated assessment delivery system that runs candidates through structured challenges and produces scored, auditable results. It packages identity/session handling, orchestration, feature extraction, scoring, integrity checks, and reporting into a cohesive pipeline for assessment operations teams.
+
 
 ## Core Value
 Deliver a reliable, end-to-end assessment pipeline that produces trustworthy, explainable scorecards.

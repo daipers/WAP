@@ -20,9 +20,9 @@
 
 | Attribute | Value |
 |-----------|-------|
-| Current Phase | 06-infrastructure |
-| Status | Completed |
-| Progress | 100% |
+| Current Phase | 07-adaptive-engine |
+| Status | Planned |
+| Progress | 0% |
 
 ---
 

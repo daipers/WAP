@@ -12,6 +12,10 @@
   - [ ] 06-02-PLAN.md — Database Hardening (pgcrypto)
   - [ ] 06-03-PLAN.md — WebSocket Resilience & Verification
 - [ ] **Phase 07: Adaptive Engine (CAT)** — Live 3PL IRT logic, MFI selection, EAP estimation engine.
+  **Plans:** 3 plans
+  - [ ] 07-01-PLAN.md — IRT Core & Metadata Extension
+  - [ ] 07-02-PLAN.md — Adaptive Session & Delivery Logic
+  - [ ] 07-03-PLAN.md — Real-time Feedback & Verification
 - [ ] **Phase 08: AI Item Generation (AIG)** — LLM pipeline for QTI 3.0, validation service, calibration seeding.
 - [ ] **Phase 09: Wizards Apprentice Agent** — Social candidate discovery (HeroHunt), personalized outreach (Instantly).
 - [ ] **Phase 10: Institutional Compliance & UI** — WCAG 2.2 audit, Unified Candidate Portal, performance optimization.

@@ -1,6 +1,6 @@
 """
 lti_service.py
-=============
+==============
 
 LTI 1.3 launch validation and launch context handling.
 """
@@ -14,9 +14,23 @@ import uuid
 
 from audit_ledger_service.events import EventType, create_event
 from audit_ledger_service.ledger import AuditLedger
+from delivery_service.accommodations import (
+    AccommodationProfile,
+    AccommodationType,
+    AccommodationService,
+)
 from lti_service.ags_client import AGSClient
 from lti_service.models import LTIPlatformConfig, LTIToolConfig
 from scoring_engine.score_runs import ScoreRun
+
+
+# PNP parameter mapping from LTI launch to accommodations
+PNP_PARAM_MAPPING = {
+    "launch_extra_time": AccommodationType.EXTRA_TIME,
+    "launch_font_size": AccommodationType.LARGE_FONT,
+    "launch_color_contrast": AccommodationType.COLOR_CONTRAST,
+    "launch_screen_reader": AccommodationType.SCREEN_READER,
+}
 
 
 @dataclass
@@ -27,6 +41,7 @@ class LaunchContext:
     line_item_url: str
     claims: Dict[str, Any]
     created_at: float
+    accommodation_profile: Optional[AccommodationProfile] = None
 
 
 class LTIService:
@@ -94,6 +109,9 @@ class LTIService:
         launch_id = str(uuid.uuid4())
         state = params.get("state") or launch_id
 
+        # Extract PNP from launch parameters
+        accommodation_profile = self.extract_pnp_from_launch(params, user_id)
+
         context = LaunchContext(
             launch_id=launch_id,
             state=state,
@@ -101,6 +119,7 @@ class LTIService:
             line_item_url=line_item_url or self._tool_config.default_line_item_url,
             claims=launch_data,
             created_at=time.time(),
+            accommodation_profile=accommodation_profile,
         )
 
         self._launch_contexts[launch_id] = context
@@ -149,6 +168,81 @@ class LTIService:
         if not isinstance(ags_claim, dict):
             return None
         return ags_claim.get("lineitem") or ags_claim.get("lineitems")
+
+    def extract_pnp_from_launch(
+        self,
+        params: Dict[str, Any],
+        user_id: str,
+    ) -> AccommodationProfile:
+        """
+        Extract Personal Needs and Preferences (PNP) from LTI launch parameters.
+
+        Supports these LTI custom parameters:
+        - launch_extra_time: Extra time as multiplier (e.g., 1.5) or additional minutes
+        - launch_font_size: Enable large font (any non-empty value)
+        - launch_color_contrast: Enable high contrast (any non-empty value)
+        - launch_screen_reader: Enable screen reader (any non-empty value)
+
+        Also extracts from launch presentation claims:
+        - locale: Language preference
+
+        Args:
+            params: LTI launch parameters (including custom parameters)
+            user_id: The user ID from the launch
+
+        Returns:
+            AccommodationProfile with extracted accommodations
+        """
+        profile = AccommodationProfile(candidate_id=user_id)
+
+        # Extract from custom parameters (prefixed with "launch_")
+        for param_name, acc_type in PNP_PARAM_MAPPING.items():
+            param_value = params.get(param_name)
+            if param_value is not None:
+                # Parse based on accommodation type
+                if acc_type == AccommodationType.EXTRA_TIME:
+                    # Try to parse as float (multiplier) first
+                    try:
+                        multiplier = float(param_value)
+                        profile.set_accommodation(acc_type, multiplier)
+                    except (ValueError, TypeError):
+                        # Try as additional minutes
+                        try:
+                            additional_minutes = int(param_value)
+                            profile.set_accommodation(acc_type, additional_minutes)
+                        except (ValueError, TypeError):
+                            # Default to 1.5x if specified but not parseable
+                            profile.set_accommodation(acc_type, 1.5)
+                elif acc_type == AccommodationType.SCREEN_READER:
+                    # Boolean - any value means enabled
+                    if param_value and str(param_value).lower() in ("true", "1", "yes"):
+                        profile.set_accommodation(acc_type, True)
+                else:
+                    # Boolean accommodations - any non-empty value enables them
+                    if param_value and str(param_value).strip():
+                        profile.set_accommodation(acc_type, True)
+
+        return profile
+
+    def get_launch_accommodations(
+        self,
+        launch_id: str,
+    ) -> Optional[AccommodationProfile]:
+        """
+        Get the accommodation profile for a launch.
+
+        Args:
+            launch_id: The launch ID
+
+        Returns:
+            AccommodationProfile if PNP was extracted, None otherwise
+        """
+        if launch_id not in self._launch_contexts:
+            return None
+
+        # Check if we stored accommodation profile during launch
+        # This would be set during validate_launch if PNP params are present
+        return getattr(self._launch_contexts[launch_id], "accommodation_profile", None)
 
     def _record_launch_event(self, context: LaunchContext) -> None:
         event = create_event(

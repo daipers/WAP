@@ -13,6 +13,7 @@ from typing import Dict, List, Optional, Any, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from delivery_service.integrity_config import LockdownConfig
+    from delivery_service.accommodations import AccommodationProfile
 
 
 class NavigationMode(str, Enum):
@@ -126,6 +127,7 @@ class AssessmentSession:
     time_remaining_seconds: Optional[int] = None
     is_completed: bool = False
     is_paused: bool = False
+    accommodation_profile: Optional["AccommodationProfile"] = None
 
     def get_current_section(
         self, definition: AssessmentDefinition
